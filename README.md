@@ -1,4 +1,4 @@
-# I Ching Simulator
+# I-Ching Simulator
 
 This project is an I Ching simulator built with React and TypeScript. It allows users to generate hexagrams and view their corresponding trigrams and hexagram data.
 
@@ -11,13 +11,13 @@ This project is an I Ching simulator built with React and TypeScript. It allows 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/iching-simulator.git
+git clone https://github.com/electricganesha/iching.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd iching-simulator
+cd iching
 ```
 
 3. Install the dependencies:
