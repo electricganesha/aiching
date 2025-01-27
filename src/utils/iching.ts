@@ -1,17 +1,26 @@
 import { HEXAGRAMS, TRIGRAMS } from "../data/data";
+import hexagramText from "../data/iching_wilhelm_translation";
 
-export const tossCoins = (): number => {
-  const coins = [0, 0, 0].map(() => (Math.random() > 0.5 ? 3 : 2)); // Heads = 3, Tails = 2
-  return coins.reduce((sum, coin) => sum + coin, 0);
+export const tossCoins = (): number[] => {
+  return [0, 0, 0].map(() => (Math.random() > 0.5 ? 3 : 2)); // Heads = 3, Tails = 2
 };
 
-export const generateLine = (): string => {
-  const total = tossCoins();
+export const generateLine = (coins: number[]): string => {
+  const total = coins.reduce((sum, coin) => sum + coin, 0);
   return total % 2 === 0 ? "0" : "1"; // Even = broken (0), Odd = unbroken (1)
 };
 
-export const generateHexagram = (): string => {
-  return Array.from({ length: 6 }, () => generateLine()).join("");
+export const generateHexagram = (): {
+  hexagram: string;
+  coinTosses: number[][];
+} => {
+  const coinTosses: number[][] = [];
+  const hexagram = Array.from({ length: 6 }, () => {
+    const coins = tossCoins();
+    coinTosses.push(coins);
+    return generateLine(coins);
+  }).join("");
+  return { hexagram, coinTosses };
 };
 
 export const getTrigrams = (hexagram: string) => {
@@ -25,4 +34,10 @@ export const getTrigrams = (hexagram: string) => {
 
 export const findHexagram = (hexagram: string) => {
   return HEXAGRAMS.find((h) => h.binary === hexagram);
+};
+
+export const getTranslationKeysForHexagramNumber = (number: number) => {
+  const text = hexagramText[number];
+
+  return text;
 };
