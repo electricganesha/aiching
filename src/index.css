@@ -1,8 +1,13 @@
 /* index.css */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
   text-align: center;
   padding: 20px;
+  color: #7d4a5b;
+  background-color: #ece2d0;
 }
 
 button {
