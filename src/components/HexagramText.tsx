@@ -1,4 +1,5 @@
 import { WilhelmHexagram } from "../types/wilhelm";
+import { BORDER_COLOR, HOVER_COLOR } from "./IChing";
 
 // Function to render the hexagram using SVG
 const renderHexagram = (hexagram: string, step: number) => {
@@ -19,7 +20,7 @@ const renderHexagram = (hexagram: string, step: number) => {
             y1={index * (lineHeight + gap)}
             x2={lineWidth}
             y2={index * (lineHeight + gap)}
-            stroke={line === "1" ? "#7d4a5b" : "transparent"}
+            stroke={line === "1" ? HOVER_COLOR : "transparent"}
             strokeWidth={strokeWidth}
             style={{ opacity: step > index ? 1 : 0 }}
           />
@@ -35,7 +36,7 @@ const renderHexagram = (hexagram: string, step: number) => {
               y1={index * (lineHeight + gap)}
               x2={lineWidth / 2 - 5}
               y2={index * (lineHeight + gap)}
-              stroke="#7d4a5b"
+              stroke={HOVER_COLOR}
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
             />
@@ -52,7 +53,7 @@ const renderHexagram = (hexagram: string, step: number) => {
               y1={index * (lineHeight + gap)}
               x2={lineWidth}
               y2={index * (lineHeight + gap)}
-              stroke="#7d4a5b"
+              stroke={HOVER_COLOR}
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
             />
@@ -88,7 +89,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
         {renderHexagram(hexagram, 6)}
         <h3>{hexagramData?.name}</h3>
       </div>
-      <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
+      <hr
+        style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
+      ></hr>
       {hexagramText && (
         <>
           <p>
@@ -98,7 +101,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             <b>Upper Trigram:</b> {trigrams?.upper?.name}
           </p>
 
-          <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
+          <hr
+            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
+          ></hr>
           <u>
             <h3> Symbolism</h3>
           </u>
@@ -106,7 +111,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             <b>Hexagram Number:</b> {hexagramData?.number}
           </p>
           <p>{hexagramText?.wilhelm_symbolic}</p>
-          <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
+          <hr
+            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
+          ></hr>
           <u>
             <h3>Judgment</h3>
           </u>
@@ -116,7 +123,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
           <p>
             <b>Comments:</b> {hexagramText?.wilhelm_judgment.comments}
           </p>
-          <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
+          <hr
+            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
+          ></hr>
           <u>
             <h3>Image</h3>
           </u>
@@ -126,7 +135,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
           <p>
             <b>Comments:</b> {hexagramText?.wilhelm_image.comments}
           </p>
-          <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
+          <hr
+            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
+          ></hr>
           <u>
             <h3>Lines</h3>
           </u>
@@ -134,7 +145,10 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             Object.entries(hexagramText.wilhelm_lines).map(([_index, line]) => (
               <div
                 key={_index}
-                style={{ borderBottom: "1px solid #a79e91", marginBottom: 10 }}
+                style={{
+                  borderBottom: `1px solid ${BORDER_COLOR}`,
+                  marginBottom: 10,
+                }}
               >
                 <h4>Line {_index}</h4>
                 <p>
