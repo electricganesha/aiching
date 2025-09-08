@@ -260,6 +260,8 @@ const IChing = () => {
     setCoinTosses([]);
     setTossed(false);
     setIsShowingCanvas(false);
+    setManualMode(false);
+    setIsHoveredManual(false);
   };
 
   return (
@@ -289,7 +291,7 @@ const IChing = () => {
           gap: 16,
         }}
       >
-        {!tossed ? (
+        {!tossed && !manualMode ? (
           <textarea
             rows={2}
             cols={48}
@@ -322,82 +324,86 @@ const IChing = () => {
         ) : (
           <p>{intention}</p>
         )}
-        <button
-          disabled={intention === ""}
-          style={{
-            backgroundColor:
-              intention === ""
-                ? "darkgrey"
-                : isHoveredToss
-                ? "#7d4a5b"
-                : "#ece2d0",
-            borderRadius: "8px",
-            border:
-              intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
-            cursor: intention === "" ? "not-allowed" : "pointer",
-            color:
-              intention === ""
-                ? "lightgray"
-                : isHoveredToss
-                ? "#ece2d0"
-                : "#7d4a5b",
-          }}
-          onClick={() => {
-            if (!tossed) {
-              handleGenerate();
-            } else {
-              setTossed(false);
-            }
-          }}
-          onMouseEnter={() => {
-            if (intention !== "") {
-              setIsHoveredToss(true);
-            }
-          }}
-          onMouseLeave={() => {
-            if (intention !== "") {
-              setIsHoveredToss(false);
-            }
-          }}
-        >
-          <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
-        </button>
-        <button
-          disabled={intention === ""}
-          style={{
-            backgroundColor:
-              intention === ""
-                ? "darkgrey"
-                : isHoveredManual
-                ? "#7d4a5b"
-                : "#ece2d0",
-            borderRadius: "8px",
-            border:
-              intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
-            cursor: intention === "" ? "not-allowed" : "pointer",
-            color:
-              intention === ""
-                ? "lightgray"
-                : isHoveredManual
-                ? "#ece2d0"
-                : "#7d4a5b",
-          }}
-          onClick={() => {
-            setManualMode(true);
-          }}
-          onMouseEnter={() => {
-            if (intention !== "") {
-              setIsHoveredManual(true);
-            }
-          }}
-          onMouseLeave={() => {
-            if (intention !== "") {
-              setIsHoveredManual(false);
-            }
-          }}
-        >
-          <b>{isShowingCanvas ? "Re-Input" : "Manual Toss"}</b> 🪙
-        </button>
+        {!manualMode && (
+          <button
+            disabled={intention === ""}
+            style={{
+              backgroundColor:
+                intention === ""
+                  ? "darkgrey"
+                  : isHoveredToss
+                  ? "#7d4a5b"
+                  : "#ece2d0",
+              borderRadius: "8px",
+              border:
+                intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
+              cursor: intention === "" ? "not-allowed" : "pointer",
+              color:
+                intention === ""
+                  ? "lightgray"
+                  : isHoveredToss
+                  ? "#ece2d0"
+                  : "#7d4a5b",
+            }}
+            onClick={() => {
+              if (!tossed) {
+                handleGenerate();
+              } else {
+                setTossed(false);
+              }
+            }}
+            onMouseEnter={() => {
+              if (intention !== "") {
+                setIsHoveredToss(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (intention !== "") {
+                setIsHoveredToss(false);
+              }
+            }}
+          >
+            <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
+          </button>
+        )}
+        {!isShowingCanvas && !tossed && !manualMode && (
+          <button
+            disabled={intention === ""}
+            style={{
+              backgroundColor:
+                intention === ""
+                  ? "darkgrey"
+                  : isHoveredManual
+                  ? "#7d4a5b"
+                  : "#ece2d0",
+              borderRadius: "8px",
+              border:
+                intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
+              cursor: intention === "" ? "not-allowed" : "pointer",
+              color:
+                intention === ""
+                  ? "lightgray"
+                  : isHoveredManual
+                  ? "#ece2d0"
+                  : "#7d4a5b",
+            }}
+            onClick={() => {
+              setManualMode(true);
+            }}
+            onMouseEnter={() => {
+              if (intention !== "") {
+                setIsHoveredManual(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (intention !== "") {
+                setIsHoveredManual(false);
+              }
+            }}
+          >
+            <b>Manual Toss</b> 🪙
+          </button>
+        )}
       </div>
 
       {manualMode ? (
@@ -448,7 +454,7 @@ const IChing = () => {
             }}
             onClick={handleManualReset}
           >
-            Reset Manual Input
+            Exit Manual Input
           </button>
         </div>
       ) : null}

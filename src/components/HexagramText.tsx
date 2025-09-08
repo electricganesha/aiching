@@ -86,6 +86,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
         }}
       >
         {renderHexagram(hexagram, 6)}
+        <h3>{hexagramData?.name}</h3>
       </div>
       <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
       {hexagramText && (
@@ -96,9 +97,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
           <p>
             <b>Upper Trigram:</b> {trigrams?.upper?.name}
           </p>
-          <p>
-            <b> Name:</b> {hexagramData?.name}
-          </p>
+
           <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>
           <u>
             <h3> Symbolism</h3>
