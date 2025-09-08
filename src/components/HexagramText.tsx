@@ -85,7 +85,6 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
           gap: 36,
         }}
       >
-        <h2>Hexagram: {hexagram}</h2>
         {renderHexagram(hexagram, 6)}
       </div>
       <hr style={{ border: "1px solid #a79e91", margin: "20px 0" }}></hr>

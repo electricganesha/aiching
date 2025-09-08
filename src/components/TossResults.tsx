@@ -30,7 +30,8 @@ export const TossResults = ({ coinTosses }: { coinTosses: number[][] }) => {
             ))}
           </div>
           <p>
-            Line {index + 1}: {toss.join(", ")} (Total:{" "}
+            Line {index + 1}:{" "}
+            {toss.map((coin) => (coin === 3 ? "H" : "T")).join(", ")} (Total:{" "}
             {toss.reduce((sum, coin) => sum + coin, 0)})
           </p>
         </div>

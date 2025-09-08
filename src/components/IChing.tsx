@@ -44,9 +44,20 @@ const IChing = () => {
     upper: Trigram;
   } | null>(null);
   const [hexagramData, setHexagramData] = useState<HexagramData | null>(null);
-  const [isHovered, setIsHovered] = useState(false); // State to manage hover
+  const [isHoveredToss, setIsHoveredToss] = useState(false);
+  const [isHoveredManual, setIsHoveredManual] = useState(false);
   const mountRef = useRef<HTMLDivElement>(null);
   const animationActiveRef = useRef(true); // Use ref to persist animation state
+  const [manualMode, setManualMode] = useState(false);
+  const [manualTosses, setManualTosses] = useState<number[][]>([
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+  ]);
+  const [manualLine, setManualLine] = useState(0);
 
   // Generate hexagram and reset animation
   const handleGenerate = () => {
@@ -65,27 +76,51 @@ const IChing = () => {
 
     setIsShowingCanvas(true);
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xece2d0);
+    scene.background = null; // transparent background
     const camera = new THREE.PerspectiveCamera(75, 400 / 200, 0.1, 1000);
-    camera.position.set(0, 2, 0);
+    camera.position.set(0, 3, 2); // Lower and move camera back
     camera.lookAt(0, 0, 0);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(400, 200);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0); // transparent
+    renderer.setSize(800, 400);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     mountRef.current.appendChild(renderer.domElement);
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    const ambientLight = new THREE.AmbientLight(0xece2d0, 0.5); // lower intensity for visible shadows
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffff00, 1.0);
-    directionalLight.position.set(0, 1, 0);
+    const directionalLight = new THREE.DirectionalLight(0xece2d0, 1.0);
+    directionalLight.position.set(0, 1.5, -1); // Move light higher and forward
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 20;
     scene.add(directionalLight);
+    // Add ground plane to receive shadows (debug: visible ground)
+    const groundGeometry = new THREE.PlaneGeometry(6, 6);
+    const groundMaterial = new THREE.ShadowMaterial({
+      opacity: 0.3,
+      transparent: true,
+      side: THREE.DoubleSide,
+    });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = 0;
+    ground.receiveShadow = true;
+    scene.add(ground);
     const loader = new THREE.TextureLoader();
     const { headsMaterial, tailsMaterial } = createCoinMaterials(loader);
     const coinGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.1, 32);
     let tossIndex = 0;
     const tosses: number[][] = [];
+    let coinMeshes: THREE.Mesh[] = [];
 
     function tossLine() {
-      while (scene.children.length > 0) scene.remove(scene.children[0]);
-      scene.add(ambientLight);
+      // Remove only coins from the scene
+      for (const mesh of coinMeshes) {
+        scene.remove(mesh);
+      }
+      coinMeshes = [];
       const coins: THREE.Mesh[] = [];
       const axes = [
         new THREE.Vector3(Math.random(), 0, Math.random()).normalize(),
@@ -93,17 +128,20 @@ const IChing = () => {
         new THREE.Vector3(Math.random(), 0, Math.random()).normalize(),
       ];
       const velocities = [
-        { y: 0.05, rotation: 0.08 + Math.random() * 0.04 },
-        { y: 0.05, rotation: 0.08 + Math.random() * 0.04 },
-        { y: 0.05, rotation: 0.08 + Math.random() * 0.04 },
+        { y: 0.08, rotation: 0.08 + Math.random() * 0.04 },
+        { y: 0.08, rotation: 0.08 + Math.random() * 0.04 },
+        { y: 0.08, rotation: 0.08 + Math.random() * 0.04 },
       ];
       const directions = [1, 1, 1]; // 1 for upward, -1 for downward
       for (let i = 0; i < 3; i++) {
         const coin = new THREE.Mesh(coinGeometry, headsMaterial);
         coin.position.x = (i - 1) * 1.2;
-        coin.position.y = 0;
+        coin.position.y = 0; // slightly above ground for visible shadow
+        coin.castShadow = true;
+        coin.receiveShadow = false;
         scene.add(coin);
         coins.push(coin);
+        coinMeshes.push(coin);
         directionalLight.lookAt(coin.position);
       }
       let currentCoin = 0;
@@ -147,6 +185,7 @@ const IChing = () => {
             frame = 0;
           }
           renderer.render(scene, camera);
+          console.log("Rendering frame", frame, "coin y:", coin.position.y);
           requestAnimationFrame(animate);
         } else {
           tosses.push([...tossResults]);
@@ -191,6 +230,38 @@ const IChing = () => {
     ? getTranslationKeysForHexagramNumber(hexagramData.number)
     : null;
 
+  // Helper for manual input UI
+  const handleManualCoin = (coinIdx: number, value: number) => {
+    setManualTosses((prev) => {
+      const updated = prev.map((line, idx) =>
+        idx === manualLine
+          ? [...line.slice(0, coinIdx), value, ...line.slice(coinIdx + 1)]
+          : line
+      );
+      // Update coinTosses in real time for display
+      setCoinTosses(updated.filter((line) => line.length > 0));
+      return updated;
+    });
+  };
+
+  const handleManualNextLine = () => {
+    if (manualLine < 5) {
+      setManualLine(manualLine + 1);
+    } else {
+      setCoinTosses(manualTosses);
+      setIsShowingCanvas(false);
+      setTossed(true);
+    }
+  };
+
+  const handleManualReset = () => {
+    setManualTosses([[], [], [], [], [], []]);
+    setManualLine(0);
+    setCoinTosses([]);
+    setTossed(false);
+    setIsShowingCanvas(false);
+  };
+
   return (
     <div>
       <h1
@@ -204,6 +275,7 @@ const IChing = () => {
           padding: "8px 16px",
           borderRadius: "8px",
           marginBottom: "16px",
+          zIndex: -1,
         }}
       >
         ☯&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I Ching |
@@ -254,7 +326,11 @@ const IChing = () => {
           disabled={intention === ""}
           style={{
             backgroundColor:
-              intention === "" ? "darkgrey" : isHovered ? "#7d4a5b" : "#ece2d0",
+              intention === ""
+                ? "darkgrey"
+                : isHoveredToss
+                ? "#7d4a5b"
+                : "#ece2d0",
             borderRadius: "8px",
             border:
               intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
@@ -262,7 +338,7 @@ const IChing = () => {
             color:
               intention === ""
                 ? "lightgray"
-                : isHovered
+                : isHoveredToss
                 ? "#ece2d0"
                 : "#7d4a5b",
           }}
@@ -275,18 +351,107 @@ const IChing = () => {
           }}
           onMouseEnter={() => {
             if (intention !== "") {
-              setIsHovered(true);
+              setIsHoveredToss(true);
             }
           }}
           onMouseLeave={() => {
             if (intention !== "") {
-              setIsHovered(false);
+              setIsHoveredToss(false);
             }
           }}
         >
-          🪙 <b>{isShowingCanvas ? "Re-Toss" : "Toss"}</b> 🪙
+          <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
+        </button>
+        <button
+          disabled={intention === ""}
+          style={{
+            backgroundColor:
+              intention === ""
+                ? "darkgrey"
+                : isHoveredManual
+                ? "#7d4a5b"
+                : "#ece2d0",
+            borderRadius: "8px",
+            border:
+              intention === "" ? "1px solid darkgrey" : "1px solid #7d4a5b",
+            cursor: intention === "" ? "not-allowed" : "pointer",
+            color:
+              intention === ""
+                ? "lightgray"
+                : isHoveredManual
+                ? "#ece2d0"
+                : "#7d4a5b",
+          }}
+          onClick={() => {
+            setManualMode(true);
+          }}
+          onMouseEnter={() => {
+            if (intention !== "") {
+              setIsHoveredManual(true);
+            }
+          }}
+          onMouseLeave={() => {
+            if (intention !== "") {
+              setIsHoveredManual(false);
+            }
+          }}
+        >
+          <b>{isShowingCanvas ? "Re-Input" : "Manual Toss"}</b> 🪙
         </button>
       </div>
+
+      {manualMode ? (
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <h3>Manual Coin Toss Input</h3>
+          <p>Line {manualLine + 1} of 6</p>
+          <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+            {[0, 1, 2].map((i) => (
+              <select
+                key={i}
+                value={manualTosses[manualLine][i] ?? ""}
+                onChange={(e) => handleManualCoin(i, Number(e.target.value))}
+                style={{ fontSize: 18, padding: 4, borderRadius: 6 }}
+              >
+                <option value="">Coin {i + 1}</option>
+                <option value={3}>Heads (3)</option>
+                <option value={2}>Tails (2)</option>
+              </select>
+            ))}
+          </div>
+          <button
+            style={{
+              marginTop: 16,
+              padding: "4px 16px",
+              borderRadius: 8,
+              background: "#ece2d0",
+              color: "#7d4a5b",
+              border: "1px solid #7d4a5b",
+              cursor: "pointer",
+            }}
+            disabled={
+              manualTosses[manualLine].length !== 3 ||
+              manualTosses[manualLine].some((v) => v !== 2 && v !== 3)
+            }
+            onClick={handleManualNextLine}
+          >
+            {manualLine < 5 ? "Next Line" : "Finish"}
+          </button>
+          <button
+            style={{
+              marginLeft: 12,
+              padding: "4px 16px",
+              borderRadius: 8,
+              background: "#ece2d0",
+              color: "#7d4a5b",
+              border: "1px solid #7d4a5b",
+              cursor: "pointer",
+            }}
+            onClick={handleManualReset}
+          >
+            Reset Manual Input
+          </button>
+        </div>
+      ) : null}
       {isShowingCanvas ? (
         <hr
           style={{
@@ -297,13 +462,31 @@ const IChing = () => {
         ></hr>
       ) : null}
       <div
-        ref={mountRef}
         style={{
+          width: "400px",
+          height: 200,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
-      />
+      >
+        <div
+          ref={mountRef}
+          style={{
+            position: "absolute",
+            top: 160,
+            left: 0,
+            width: "100%",
+            height: 200,
+            pointerEvents: "none",
+            zIndex: 10,
+            margin: "20px auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        />
+      </div>
       {isShowingCanvas ? (
         <hr style={{ border: "1px solid #a79e91", margin: "0" }}></hr>
       ) : null}
