@@ -1,5 +1,7 @@
+import { BORDER_COLOR, HOVER_COLOR } from "../pages/Home";
 import { WilhelmHexagram } from "../types/wilhelm";
-import { BORDER_COLOR, HOVER_COLOR } from "./IChing";
+import { Card } from "./Card";
+import { CollapsibleCard } from "./CollapsibleCard";
 
 // Function to render the hexagram using SVG
 const renderHexagram = (hexagram: string, step: number) => {
@@ -15,7 +17,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .reverse() // Reverse to draw bottom line first
         .map((line, index) => (
           <line
-            key={index}
+            key={line}
             x1={0}
             y1={index * (lineHeight + gap)}
             x2={lineWidth}
@@ -31,7 +33,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .map((line, index) =>
           line === "0" ? (
             <line
-              key={index}
+              key={line}
               x1={0}
               y1={index * (lineHeight + gap)}
               x2={lineWidth / 2 - 5}
@@ -48,7 +50,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .map((line, index) =>
           line === "0" ? (
             <line
-              key={index}
+              key={line}
               x1={lineWidth / 2 + 5}
               y1={index * (lineHeight + gap)}
               x2={lineWidth}
@@ -78,87 +80,100 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
 }) => {
   return (
     <div style={{ width: "100%" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 36,
-        }}
-      >
-        {renderHexagram(hexagram, 6)}
-        <h3>{hexagramData?.name}</h3>
-      </div>
+      <Card>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 36,
+          }}
+        >
+          {renderHexagram(hexagram, 6)}
+          <h3>{hexagramData?.name}</h3>
+        </div>
+      </Card>
       <hr
         style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
       ></hr>
       {hexagramText && (
         <>
-          <p>
-            <b>Lower Trigram:</b> {trigrams?.lower?.name}
-          </p>
-          <p>
-            <b>Upper Trigram:</b> {trigrams?.upper?.name}
-          </p>
-
+          <CollapsibleCard>
+            <p>
+              <b>Lower Trigram:</b> {trigrams?.lower?.name}
+            </p>
+            <p>
+              <b>Upper Trigram:</b> {trigrams?.upper?.name}
+            </p>
+          </CollapsibleCard>
           <hr
             style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
           ></hr>
-          <u>
-            <h3> Symbolism</h3>
-          </u>
-          <p>
-            <b>Hexagram Number:</b> {hexagramData?.number}
-          </p>
-          <p>{hexagramText?.wilhelm_symbolic}</p>
+          <CollapsibleCard>
+            <u>
+              <h3> Symbolism</h3>
+            </u>
+            <p>
+              <b>Hexagram Number:</b> {hexagramData?.number}
+            </p>
+            <p>{hexagramText?.wilhelm_symbolic}</p>
+          </CollapsibleCard>
           <hr
             style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
           ></hr>
-          <u>
-            <h3>Judgment</h3>
-          </u>
-          <p>
-            <b>Original Text:</b> {hexagramText?.wilhelm_judgment.text}
-          </p>
-          <p>
-            <b>Comments:</b> {hexagramText?.wilhelm_judgment.comments}
-          </p>
+          <CollapsibleCard>
+            <u>
+              <h3>Judgment</h3>
+            </u>
+            <p>
+              <b>Original Text:</b> {hexagramText?.wilhelm_judgment.text}
+            </p>
+            <p>
+              <b>Comments:</b> {hexagramText?.wilhelm_judgment.comments}
+            </p>
+          </CollapsibleCard>
           <hr
             style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
           ></hr>
-          <u>
-            <h3>Image</h3>
-          </u>
-          <p>
-            <b>Original Text:</b> {hexagramText?.wilhelm_image.text}
-          </p>
-          <p>
-            <b>Comments:</b> {hexagramText?.wilhelm_image.comments}
-          </p>
+          <CollapsibleCard>
+            <u>
+              <h3>Image</h3>
+            </u>
+            <p>
+              <b>Original Text:</b> {hexagramText?.wilhelm_image.text}
+            </p>
+            <p>
+              <b>Comments:</b> {hexagramText?.wilhelm_image.comments}
+            </p>
+          </CollapsibleCard>
           <hr
             style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
           ></hr>
-          <u>
-            <h3>Lines</h3>
-          </u>
-          {hexagramText &&
-            Object.entries(hexagramText.wilhelm_lines).map(([_index, line]) => (
-              <div
-                key={_index}
-                style={{
-                  borderBottom: `1px solid ${BORDER_COLOR}`,
-                  marginBottom: 10,
-                }}
-              >
-                <h4>Line {_index}</h4>
-                <p>
-                  <b>Original Text:</b> {line.text}
-                </p>
-                <p>
-                  <b>Comments:</b> {line.comments}
-                </p>
-              </div>
-            ))}
+          <CollapsibleCard>
+            <u>
+              <h3>Lines</h3>
+            </u>
+            {hexagramText &&
+              Object.entries(hexagramText.wilhelm_lines).map(
+                ([_index, line]) => (
+                  <div
+                    key={_index}
+                    style={{
+                      borderBottom: `1px solid ${BORDER_COLOR}`,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <h4>Line {_index}</h4>
+                    <p>
+                      <b>Original Text:</b> {line.text}
+                    </p>
+                    <p>
+                      <b>Comments:</b> {line.comments}
+                    </p>
+                  </div>
+                )
+              )}
+          </CollapsibleCard>
         </>
       )}
     </div>

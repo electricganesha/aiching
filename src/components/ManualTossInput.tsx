@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { BACKGROUND_COLOR, HOVER_COLOR } from "./IChing";
+import { BACKGROUND_COLOR, HOVER_COLOR } from "../pages/Home";
 
 interface ManualTossInputProps {
   manualMode: boolean;

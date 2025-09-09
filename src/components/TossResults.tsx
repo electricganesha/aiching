@@ -1,41 +1,51 @@
+import { Card } from "./Card";
+
 export const TossResults = ({ coinTosses }: { coinTosses: number[][] }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
+    <Card>
       <h3>Coin Tosses:</h3>
-      {coinTosses?.map((toss, index) => (
-        <div
-          key={index}
-          style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
-        >
-          <div style={{ display: "flex", gap: 8, marginRight: 12 }}>
-            {toss.map((coin, i) => (
-              <img
-                key={i}
-                src={
-                  coin === 3
-                    ? "/icons/fengshuicoinheads-icon.png"
-                    : "/icons/fengshuicointails-icon.png"
-                }
-                alt={coin === 3 ? "Heads" : "Tails"}
-                style={{ width: 40, height: 40 }}
-              />
-            ))}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 16,
+          marginBottom: 8,
+        }}
+      >
+        {coinTosses?.map((toss, index) => (
+          <div
+            key={toss.join("-")}
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              width: "100%",
+              gap: 24,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {toss.map((coin, i) => (
+                <img
+                  key={coin + i}
+                  src={
+                    coin === 3
+                      ? "/icons/fengshuicoinheads-icon.png"
+                      : "/icons/fengshuicointails-icon.png"
+                  }
+                  alt={coin === 3 ? "Heads" : "Tails"}
+                  style={{ width: 56, height: 56 }}
+                />
+              ))}
+            </div>
+
+            <p>
+              <b>Line {index + 1}: </b>
+              {toss.map((coin) => (coin === 3 ? "H" : "T")).join(", ")}
+            </p>
           </div>
-          <p>
-            Line {index + 1}:{" "}
-            {toss.map((coin) => (coin === 3 ? "H" : "T")).join(", ")} (Total:{" "}
-            {toss.reduce((sum, coin) => sum + coin, 0)})
-          </p>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </Card>
   );
 };

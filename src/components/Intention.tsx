@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { HOVER_COLOR } from "./IChing";
+import { HOVER_COLOR } from "../pages/Home";
 
 interface IntentionProps {
   showIntention: boolean;
@@ -23,7 +23,7 @@ export const Intention: FC<IntentionProps> = ({
     >
       {showIntention ? (
         <textarea
-          rows={2}
+          rows={4}
           cols={48}
           placeholder="E.g. What should I do today?"
           style={{

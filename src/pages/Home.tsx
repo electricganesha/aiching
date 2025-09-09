@@ -6,13 +6,13 @@ import {
   getTrigrams,
 } from "../utils/iching";
 import { WilhelmHexagram } from "../types/wilhelm";
-import { TossResults } from "./TossResults";
-import { HexagramText } from "./HexagramText";
+
 import { Canvas } from "@react-three/fiber";
-import { CoinTossCanvas } from "./CoinTossCanvas";
-import { Header } from "./Header";
-import { Intention } from "./Intention";
-import { ManualTossInput } from "./ManualTossInput";
+import { ManualTossInput } from "../components/ManualTossInput";
+import { HexagramText } from "../components/HexagramText";
+import { TossResults } from "../components/TossResults";
+import { CoinTossCanvas } from "../components/CoinTossCanvas";
+import { Intention } from "../components/Intention";
 
 interface Trigram {
   name: string;
@@ -27,7 +27,7 @@ export const BACKGROUND_COLOR = "#fffaf0";
 export const BORDER_COLOR = "#f2eada";
 export const HOVER_COLOR = "#7d4a5b";
 
-const IChing = () => {
+const Home = () => {
   const [hexagram, setHexagram] = useState<string>("");
   const [coinTosses, setCoinTosses] = useState<number[][]>([]);
   const [isShowingCanvas, setIsShowingCanvas] = useState(false);
@@ -94,13 +94,13 @@ const IChing = () => {
 
   return (
     <div>
-      <Header />
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
           gap: 16,
+          marginLeft: 24,
         }}
       >
         <Intention
@@ -108,91 +108,99 @@ const IChing = () => {
           intention={intention}
           setIntention={setIntention}
         />
-
-        {!manualMode && (
-          <button
-            disabled={intention === ""}
-            style={{
-              backgroundColor:
-                intention === ""
-                  ? "darkgrey"
-                  : isHoveredToss
-                  ? HOVER_COLOR
-                  : BORDER_COLOR,
-              borderRadius: "8px",
-              border:
-                intention === ""
-                  ? `1px solid darkgrey`
-                  : `1px solid ${HOVER_COLOR}`,
-              cursor: intention === "" ? "not-allowed" : "pointer",
-              color:
-                intention === ""
-                  ? "lightgray"
-                  : isHoveredToss
-                  ? BACKGROUND_COLOR
-                  : HOVER_COLOR,
-            }}
-            onClick={() => {
-              if (!tossed) {
-                handleGenerate();
-              } else {
-                setTossed(false);
-              }
-            }}
-            onMouseEnter={() => {
-              if (intention !== "") {
-                setIsHoveredToss(true);
-              }
-            }}
-            onMouseLeave={() => {
-              if (intention !== "") {
-                setIsHoveredToss(false);
-              }
-            }}
-          >
-            <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
-          </button>
-        )}
-        {!isShowingCanvas && !tossed && !manualMode && (
-          <button
-            disabled={intention === ""}
-            style={{
-              backgroundColor:
-                intention === ""
-                  ? "darkgrey"
-                  : isHoveredManual
-                  ? HOVER_COLOR
-                  : BORDER_COLOR,
-              borderRadius: "8px",
-              border:
-                intention === ""
-                  ? `1px solid darkgrey`
-                  : `1px solid ${HOVER_COLOR}`,
-              cursor: intention === "" ? "not-allowed" : "pointer",
-              color:
-                intention === ""
-                  ? "lightgray"
-                  : isHoveredManual
-                  ? BACKGROUND_COLOR
-                  : HOVER_COLOR,
-            }}
-            onClick={() => {
-              setManualMode(true);
-            }}
-            onMouseEnter={() => {
-              if (intention !== "") {
-                setIsHoveredManual(true);
-              }
-            }}
-            onMouseLeave={() => {
-              if (intention !== "") {
-                setIsHoveredManual(false);
-              }
-            }}
-          >
-            <b>Manual Toss</b> 🪙
-          </button>
-        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          {!manualMode && (
+            <button
+              disabled={intention === ""}
+              style={{
+                backgroundColor:
+                  intention === ""
+                    ? "darkgrey"
+                    : isHoveredToss
+                    ? HOVER_COLOR
+                    : BORDER_COLOR,
+                borderRadius: "8px",
+                border:
+                  intention === ""
+                    ? `1px solid darkgrey`
+                    : `1px solid ${HOVER_COLOR}`,
+                cursor: intention === "" ? "not-allowed" : "pointer",
+                color:
+                  intention === ""
+                    ? "lightgray"
+                    : isHoveredToss
+                    ? BACKGROUND_COLOR
+                    : HOVER_COLOR,
+              }}
+              onClick={() => {
+                if (!tossed) {
+                  handleGenerate();
+                } else {
+                  setTossed(false);
+                }
+              }}
+              onMouseEnter={() => {
+                if (intention !== "") {
+                  setIsHoveredToss(true);
+                }
+              }}
+              onMouseLeave={() => {
+                if (intention !== "") {
+                  setIsHoveredToss(false);
+                }
+              }}
+            >
+              <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
+            </button>
+          )}
+          {!isShowingCanvas && !tossed && !manualMode && (
+            <button
+              disabled={intention === ""}
+              style={{
+                backgroundColor:
+                  intention === ""
+                    ? "darkgrey"
+                    : isHoveredManual
+                    ? HOVER_COLOR
+                    : BORDER_COLOR,
+                borderRadius: "8px",
+                border:
+                  intention === ""
+                    ? `1px solid darkgrey`
+                    : `1px solid ${HOVER_COLOR}`,
+                cursor: intention === "" ? "not-allowed" : "pointer",
+                color:
+                  intention === ""
+                    ? "lightgray"
+                    : isHoveredManual
+                    ? BACKGROUND_COLOR
+                    : HOVER_COLOR,
+              }}
+              onClick={() => {
+                setManualMode(true);
+              }}
+              onMouseEnter={() => {
+                if (intention !== "") {
+                  setIsHoveredManual(true);
+                }
+              }}
+              onMouseLeave={() => {
+                if (intention !== "") {
+                  setIsHoveredManual(false);
+                }
+              }}
+            >
+              <b>Manual Toss</b> 🪙
+            </button>
+          )}
+        </div>
       </div>
 
       <ManualTossInput
@@ -303,4 +311,4 @@ const IChing = () => {
   );
 };
 
-export default IChing;
+export default Home;
