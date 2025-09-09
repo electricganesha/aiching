@@ -14,11 +14,13 @@ export const Intention: FC<IntentionProps> = ({
 }) => {
   return (
     <div
+      className="responsive-flex"
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         gap: 16,
+        flexWrap: "wrap",
       }}
     >
       {showIntention ? (
@@ -35,6 +37,7 @@ export const Intention: FC<IntentionProps> = ({
             color: HOVER_COLOR,
             textAlign: "center",
             verticalAlign: "middle",
+            width: window.innerWidth < 768 ? "92%" : "auto", // Adjust width for mobile
           }}
           onInput={(e) => setIntention((e.target as HTMLTextAreaElement).value)}
           onFocus={(e) => {

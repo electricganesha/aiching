@@ -8,6 +8,7 @@ export const Navbar: FC = () => {
     <nav
       style={{
         display: "flex",
+        flexDirection: window.innerWidth < 768 ? "column" : "row",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 20px",

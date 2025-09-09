@@ -93,14 +93,16 @@ const Home = () => {
     : null;
 
   return (
-    <div>
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: 8 }}>
       <div
+        className="responsive-flex"
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "row",
+          justifyContent: "flex-start",
           alignItems: "center",
           gap: 16,
-          marginLeft: 24,
+          flexWrap: "wrap",
         }}
       >
         <Intention
@@ -109,11 +111,13 @@ const Home = () => {
           setIntention={setIntention}
         />
         <div
+          className="responsive-btns"
           style={{
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
             gap: 16,
+            flexWrap: "wrap",
           }}
         >
           {!manualMode && (
@@ -223,18 +227,18 @@ const Home = () => {
       ) : null}
       <div
         style={{
-          width: "400px",
+          width: "100%",
+          maxWidth: 400,
           height: 200,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          margin: "0 auto",
         }}
       >
         <div
           style={{
-            position: "absolute",
-            top: 160,
-            left: 0,
+            position: "relative",
             width: "100%",
             height: 200,
             pointerEvents: "none",
@@ -277,24 +281,27 @@ const Home = () => {
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "space-evenly",
-          alignItems: "flex-start",
+          alignItems: "stretch",
+          gap: 24,
         }}
       >
-        <div style={{ width: "50%", paddingTop: 48 }}>
+        <div style={{ width: "100%", paddingTop: 24, minWidth: 0 }}>
           {displayedTosses.length > 0 && (
             <TossResults coinTosses={displayedTosses} />
           )}
         </div>
         <div
           style={{
-            width: "50%",
+            width: "100%",
             borderLeft:
               (isShowingCanvas || coinTosses.length > 0) && tossesComplete
                 ? `1px solid ${BORDER_COLOR}`
                 : "none",
-            paddingLeft: 128,
-            paddingTop: 48,
+            paddingLeft: 0,
+            paddingTop: 24,
+            minWidth: 0,
           }}
         >
           {tossesComplete && hexagram && (
@@ -307,6 +314,32 @@ const Home = () => {
           )}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          .responsive-flex {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+          }
+          .responsive-btns {
+            width: 100% !important;
+            justify-content: center !important;
+            gap: 8px !important;
+          }
+          .responsive-btns button {
+            width: 100%;
+            margin-bottom: 8px;
+          }
+          .responsive-canvas {
+            max-width: 100vw !important;
+            height: 160px !important;
+          }
+          .responsive-card {
+            margin: 8px !important;
+            padding: 8px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

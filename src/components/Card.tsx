@@ -7,6 +7,7 @@ interface CardProps extends React.HTMLProps<HTMLDivElement> {
 export const Card = ({ children, ...props }: CardProps) => {
   return (
     <div
+      className="responsive-card"
       style={{
         display: "flex",
         justifyContent: "flex-start",
@@ -14,7 +15,7 @@ export const Card = ({ children, ...props }: CardProps) => {
         alignItems: "center",
         backgroundColor: "white",
         padding: 16,
-        margin: 24,
+        margin: window.innerWidth < 768 ? 0 : 24,
         borderRadius: 8,
         border: `1px solid ${BORDER_COLOR}`,
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",

@@ -10,6 +10,7 @@ export const CollapsibleCard = ({
 }: CollapsibleCardProps) => {
   return (
     <div
+      className="responsive-card"
       style={{
         display: "flex",
         justifyContent: "flex-start",
