@@ -1,7 +1,7 @@
 import { WilhelmHexagram } from "@/types/wilhelm";
 import { Card } from "../Card/Card";
 
-import "./HexagramText.css";
+import styles from "./HexagramText.module.css";
 
 // Function to render the hexagram using SVG
 const renderHexagram = (hexagram: string, step: number) => {
@@ -17,7 +17,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .reverse() // Reverse to draw bottom line first
         .map((line, index) => (
           <line
-            key={line}
+            key={line + index}
             x1={0}
             y1={index * (lineHeight + gap)}
             x2={lineWidth}
@@ -33,7 +33,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .map((line, index) =>
           line === "0" ? (
             <line
-              key={line}
+              key={line + index}
               x1={0}
               y1={index * (lineHeight + gap)}
               x2={lineWidth / 2 - 5}
@@ -50,7 +50,7 @@ const renderHexagram = (hexagram: string, step: number) => {
         .map((line, index) =>
           line === "0" ? (
             <line
-              key={line}
+              key={line + index}
               x1={lineWidth / 2 + 5}
               y1={index * (lineHeight + gap)}
               x2={lineWidth}
@@ -81,12 +81,12 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
   return (
     <div style={{ width: "100%" }}>
       <Card>
-        <div className="hexagramText">
+        <div className={styles.hexagramText}>
           {renderHexagram(hexagram, 6)}
           <h3>{hexagramData?.name}</h3>
         </div>
       </Card>
-      <hr className="divider"></hr>
+      <hr className={styles.divider}></hr>
       {hexagramText && (
         <>
           <Card>
@@ -97,7 +97,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
               <b>Upper Trigram:</b> {trigrams?.upper?.name}
             </p>
           </Card>
-          <hr className="divider"></hr>
+          <hr className={styles.divider}></hr>
           <Card>
             <u>
               <h3> Symbolism</h3>
@@ -107,7 +107,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             </p>
             <p>{hexagramText?.wilhelm_symbolic}</p>
           </Card>
-          <hr className="divider"></hr>
+          <hr className={styles.divider}></hr>
           <Card>
             <u>
               <h3>Judgment</h3>
@@ -119,7 +119,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
               <b>Comments:</b> {hexagramText?.wilhelm_judgment.comments}
             </p>
           </Card>
-          <hr className="divider"></hr>
+          <hr className={styles.divider}></hr>
           <Card>
             <u>
               <h3>Image</h3>
@@ -131,7 +131,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
               <b>Comments:</b> {hexagramText?.wilhelm_image.comments}
             </p>
           </Card>
-          <hr className="divider"></hr>
+          <hr className={styles.divider}></hr>
           <Card>
             <u>
               <h3>Lines</h3>

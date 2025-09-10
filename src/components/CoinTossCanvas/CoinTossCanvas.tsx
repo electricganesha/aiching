@@ -96,17 +96,6 @@ export const CoinTossCanvas: FC<CoinTossCanvasProps> = ({
       showResults,
     } = animState;
 
-    console.log({
-      currentToss,
-      currentCoin,
-      frame,
-      positions,
-      velocities,
-      directions,
-      rotations,
-      showResults,
-      coinTosses,
-    });
     if (currentToss === coinTosses.length - 1) {
       setAnimState((s) => ({ ...s, showResults: true }));
       onAnimationEnd();

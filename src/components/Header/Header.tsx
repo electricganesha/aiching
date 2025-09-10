@@ -1,13 +1,13 @@
 "use client";
 
-import "./Header.css";
+import styles from "./Header.module.css";
 
 import Image from "next/image";
 import { FC } from "react";
 
 export const Header: FC = () => {
   return (
-    <div className="header">
+    <div className={styles.header}>
       <Image
         src="/logo/logo.png"
         alt="I-Chingify Logo"

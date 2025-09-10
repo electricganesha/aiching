@@ -1,0 +1,56 @@
+.manualTossInput {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.coinSelectors {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.coinSelect {
+    appearance: none;
+    background-color: var(--secondary);
+    border: 1px solid var(--shadow);
+    align-items: center;
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    cursor: pointer;
+    line-height: inherit;
+    font-size: 18px;
+    padding: 4px;
+    border-radius: 8px;
+    height: 36px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+
+    &:hover {
+        border-color: var(--highlight);
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.responsiveBtns {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid var(--shadow);
+    padding-top: 24px;
+    margin-top: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 600px) {
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+}

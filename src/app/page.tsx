@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HexagramData, Trigram } from "@/types/hexagram";
 import { WilhelmHexagram } from "@/types/wilhelm";
 import {
@@ -16,6 +16,9 @@ import { Canvas } from "@react-three/fiber";
 import { CoinTossCanvas } from "@/components/CoinTossCanvas/CoinTossCanvas";
 import { HexagramText } from "@/components/HexagramText/HexagramText";
 
+import styles from "./page.module.css";
+import Image from "next/image";
+import { Button } from "@/components/Button/Button";
 const NUMBER_OF_TOSSES = 6;
 
 export default function Home() {
@@ -29,8 +32,6 @@ export default function Home() {
     upper: Trigram;
   } | null>(null);
   const [hexagramData, setHexagramData] = useState<HexagramData | null>(null);
-  const [isHoveredToss, setIsHoveredToss] = useState(false);
-  const [isHoveredManual, setIsHoveredManual] = useState(false);
   const [manualMode, setManualMode] = useState(false);
 
   const [animate, setAnimate] = useState(false);
@@ -38,7 +39,7 @@ export default function Home() {
   const [tossesComplete, setTossesComplete] = useState(false);
 
   // Generate hexagram and reset animation (now for R3F)
-  const handleGenerate = () => {
+  const handleGenerate = useCallback(() => {
     setHexagram("");
     setCoinTosses([]);
     setDisplayedTosses([]);
@@ -48,6 +49,7 @@ export default function Home() {
     setIsShowingCanvas(true);
     setAnimate(true);
     setTossesComplete(false);
+
     // Simulate tosses for demo: you can animate this with state for each toss
     const tosses: number[][] = [];
     for (let i = 0; i <= NUMBER_OF_TOSSES; i++) {
@@ -58,7 +60,19 @@ export default function Home() {
       ]);
     }
     setCoinTosses(tosses);
-  };
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setHexagram("");
+    setCoinTosses([]);
+    setDisplayedTosses([]);
+    setTrigrams(null);
+    setHexagramData(null);
+    setTossed(false);
+    setIsShowingCanvas(false);
+    setAnimate(false);
+    setTossesComplete(false);
+  }, []);
 
   // Only calculate hexagram after tossesComplete
   useEffect(() => {
@@ -85,115 +99,50 @@ export default function Home() {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: 8 }}>
-      <div
-        className="responsive-flex"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 16,
-          flexWrap: "wrap",
-        }}
-      >
+      <div className={styles.mainLayout}>
         <Intention
           showIntention={!tossed && !manualMode}
           intention={intention}
           setIntention={setIntention}
         />
-        <div
-          className="responsive-btns"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 16,
-            flexWrap: "wrap",
-          }}
-        >
+        <div className={styles.responsiveBtns}>
           {!manualMode && (
-            <button
-              disabled={intention === ""}
-              style={{
-                backgroundColor:
-                  intention === ""
-                    ? "darkgrey"
-                    : isHoveredToss
-                    ? "var(--highlight)"
-                    : "var(--secondary)",
-                borderRadius: "8px",
-                border:
-                  intention === ""
-                    ? `1px solid darkgrey`
-                    : `1px solid var(--primary)`,
-                cursor: intention === "" ? "not-allowed" : "pointer",
-                color:
-                  intention === ""
-                    ? "lightgray"
-                    : isHoveredToss
-                    ? "var(--background)"
-                    : "var(--primary)",
-              }}
+            <Button
+              disabled={intention === "" || animate}
               onClick={() => {
                 if (!tossed) {
                   handleGenerate();
                 } else {
-                  setTossed(false);
-                }
-              }}
-              onMouseEnter={() => {
-                if (intention !== "") {
-                  setIsHoveredToss(true);
-                }
-              }}
-              onMouseLeave={() => {
-                if (intention !== "") {
-                  setIsHoveredToss(false);
+                  handleReset();
                 }
               }}
             >
-              <b>{isShowingCanvas ? "Re-Toss" : "Auto Toss"}</b> 🪙
-            </button>
+              <b>{isShowingCanvas && tossed ? "Toss again" : "Toss coins"}</b>
+              <Image
+                src="/icons/fengshuicoins.png"
+                alt="Toss coins"
+                width={20}
+                height={20}
+              />
+            </Button>
           )}
           {!isShowingCanvas && !tossed && !manualMode && (
-            <button
+            <Button
               disabled={intention === ""}
-              style={{
-                backgroundColor:
-                  intention === ""
-                    ? "darkgrey"
-                    : isHoveredManual
-                    ? "var(--highlight)"
-                    : "var(--secondary)",
-                borderRadius: "8px",
-                border:
-                  intention === ""
-                    ? `1px solid darkgrey`
-                    : `1px solid var(--primary)`,
-                cursor: intention === "" ? "not-allowed" : "pointer",
-                color:
-                  intention === ""
-                    ? "lightgray"
-                    : isHoveredManual
-                    ? "var(--background)"
-                    : "var(--primary)",
-              }}
               onClick={() => {
                 setManualMode(true);
               }}
-              onMouseEnter={() => {
-                if (intention !== "") {
-                  setIsHoveredManual(true);
-                }
-              }}
-              onMouseLeave={() => {
-                if (intention !== "") {
-                  setIsHoveredManual(false);
-                }
-              }}
             >
-              <b>Manual Toss</b> 🪙
-            </button>
+              <b>
+                {isShowingCanvas && tossed ? "Re-input tosses" : "Input tosses"}
+              </b>
+              <Image
+                src="/icons/fengshuiinput.png"
+                alt="Input tosses"
+                width={20}
+                height={20}
+              />
+            </Button>
           )}
         </div>
       </div>
@@ -202,12 +151,14 @@ export default function Home() {
         manualMode={manualMode}
         setCoinTosses={setCoinTosses}
         setTossed={setTossed}
+        setDisplayedTosses={setDisplayedTosses}
         setIsShowingCanvas={setIsShowingCanvas}
         setManualMode={setManualMode}
-        setIsHoveredManual={setIsHoveredManual}
+        setTossesComplete={setTossesComplete}
+        handleReset={handleReset}
       />
 
-      {isShowingCanvas ? (
+      {isShowingCanvas && !manualMode ? (
         <hr
           style={{
             border: `1px solid var(--shadow)`,
@@ -216,85 +167,68 @@ export default function Home() {
           }}
         ></hr>
       ) : null}
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 400,
-          height: 200,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "0 auto",
-        }}
-      >
+      {!manualMode ? (
         <div
           style={{
-            position: "relative",
             width: "100%",
+            maxWidth: 400,
             height: 200,
-            pointerEvents: "none",
-            zIndex: 10,
-            margin: "20px auto",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            margin: "0 auto",
           }}
         >
-          {(isShowingCanvas || coinTosses.length > 0) && (
-            <div
-              style={{
-                width: 800,
-                height: 400,
-                position: "relative",
-                zIndex: 10,
-              }}
-            >
-              <Canvas shadows camera={{ position: [0, 3, 3], fov: 75 }}>
-                <CoinTossCanvas
-                  coinTosses={coinTosses}
-                  animate={animate}
-                  onAnimationEnd={() => {
-                    setAnimate(false);
-                    setTossesComplete(true);
-                  }}
-                  onTossUpdate={setDisplayedTosses}
-                  headsUrl="/icons/fengshuicoinheads-icon.png"
-                  tailsUrl="/icons/fengshuicointails-icon.png"
-                />
-              </Canvas>
-            </div>
-          )}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: 200,
+              pointerEvents: "none",
+              zIndex: 10,
+              margin: "20px auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {(isShowingCanvas || (coinTosses.length > 0 && !manualMode)) && (
+              <div
+                style={{
+                  width: 800,
+                  height: 400,
+                  position: "relative",
+                  zIndex: 10,
+                }}
+              >
+                <Canvas shadows camera={{ position: [0, 3, 3], fov: 75 }}>
+                  <CoinTossCanvas
+                    coinTosses={coinTosses}
+                    animate={animate}
+                    onAnimationEnd={() => {
+                      setAnimate(false);
+                      setTossesComplete(true);
+                    }}
+                    onTossUpdate={setDisplayedTosses}
+                    headsUrl="/icons/fengshuicoinheads-icon.png"
+                    tailsUrl="/icons/fengshuicointails-icon.png"
+                  />
+                </Canvas>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {isShowingCanvas ? (
+      ) : null}
+      {isShowingCanvas && !manualMode ? (
         <hr style={{ border: `1px solid var(--shadow)`, margin: "0" }}></hr>
       ) : null}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          alignItems: "stretch",
-          gap: 24,
-        }}
-      >
+      <div className={styles.resultsLayout}>
         <div style={{ width: "100%", paddingTop: 8, minWidth: 0 }}>
           {displayedTosses.length > 0 && (
             <TossResults coinTosses={displayedTosses} />
           )}
         </div>
-        <div
-          style={{
-            width: "100%",
-            borderLeft:
-              (isShowingCanvas || coinTosses.length > 0) && tossesComplete
-                ? `1px solid var(--shadow)`
-                : "none",
-            paddingLeft: 0,
-            paddingTop: 8,
-            minWidth: 0,
-          }}
-        >
+        <div className={styles.hexagramTextContainer}>
           {tossesComplete && hexagram && (
             <HexagramText
               hexagram={hexagram}

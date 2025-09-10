@@ -3,18 +3,24 @@
     flex-direction: "column";
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 0;
     margin-bottom: 28px;
-    max-width: 960px;
     border-bottom: 1px solid var(--shadow);
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
-.navbar-link {
-    margin: 0 10px;
+.navbar__link {
+    margin: 0;
+    padding: 0 10px;
     text-decoration: none;
     color: var(--shadow);
 }
-.navbar-link:hover {
+
+.navbar__link:hover {
     color: var(--highlight);
     text-decoration: underline;
 }

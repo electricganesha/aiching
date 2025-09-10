@@ -1,30 +1,32 @@
 import Image from "next/image";
 import { Card } from "../Card/Card";
 
-import "./TossResults.css";
+import styles from "./TossResults.module.css";
 
 export const TossResults = ({ coinTosses }: { coinTosses: number[][] }) => {
   return (
     <Card>
       <h3>Coin Tosses:</h3>
-      <div className="tossResultsContainer">
+      <div className={styles.tossResultsContainer}>
         {coinTosses?.map((toss, index) => (
-          <div key={toss.join("-")} className="tossResultRow">
-            <div className="tossResultImages">
+          <div key={toss.join("-") + index} className={styles.tossResultRow}>
+            <div className={styles.tossResultImages}>
               {toss.map((coin, i) => (
                 <Image
-                  key={coin + i}
+                  key={toss.join("-") + coin + i}
                   src={
                     coin === 3
                       ? "/icons/fengshuicoinheads-icon.png"
                       : "/icons/fengshuicointails-icon.png"
                   }
+                  width={48}
+                  height={48}
                   alt={coin === 3 ? "Heads" : "Tails"}
                 />
               ))}
             </div>
 
-            <p className="tossResultText">
+            <p className={styles.tossResultText}>
               <b>Line {index + 1}: </b>
               {toss.map((coin) => (coin === 3 ? "H" : "T")).join(", ")}
             </p>

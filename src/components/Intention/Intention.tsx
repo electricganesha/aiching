@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import "./Intention.css";
+import styles from "./Intention.module.css";
 
 interface IntentionProps {
   showIntention: boolean;
@@ -14,17 +14,17 @@ export const Intention: FC<IntentionProps> = ({
   setIntention,
 }) => {
   return (
-    <div className="intention">
+    <div className={styles.intention}>
       {showIntention ? (
         <textarea
           rows={4}
           cols={48}
           placeholder="E.g. What should I do today?"
-          className="intention-textarea"
+          className={styles.intentionTextarea}
           onInput={(e) => setIntention((e.target as HTMLTextAreaElement).value)}
         ></textarea>
       ) : (
-        <p>{intention}</p>
+        <div className={styles.intentionText}>{intention}</div>
       )}
     </div>
   );

@@ -1,0 +1,48 @@
+.intention {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 360px;
+
+    @media screen and (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.intentionTextarea {
+    resize: none;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--shadow);
+    color: var(--shadow);
+    text-align: center;
+    width: auto;
+    margin-bottom: 12px;
+    cursor: text;
+}
+
+.intentionTextarea:focus {
+    outline: none;
+    color: var(--highlight);
+    border: 1px solid var(--highlight);
+}
+
+.intention-label {
+    font-size: 12px;
+
+    color: var(--highlight);
+    margin-bottom: 4px;
+}
+
+.intentionText {
+    width: 360px;
+    color: var(--shadow);
+    border: 2px solid var(--highlight);
+    padding: 24px;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 12px;
+}

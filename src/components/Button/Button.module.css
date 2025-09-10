@@ -1,0 +1,22 @@
+.button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+
+    &:hover {
+        background-color: var(--highlight);
+        color: var(--background);
+        cursor: pointer;
+    }
+
+    &:disabled {
+        border: 1px dashed black;
+        background-color: lightgray;
+        color: darkgrey;
+        cursor: not-allowed;
+    }
+}
