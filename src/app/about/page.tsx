@@ -1,9 +1,9 @@
-import { Card } from "../components/Card";
+import { Card } from "@/components/Card/Card";
 
-export const About = () => {
+export default function About() {
   return (
-    <Card>
-      <div style={{ maxWidth: 960, lineHeight: 1.6 }}>
+    <div style={{ lineHeight: 1.5, padding: 8 }}>
+      <Card>
         <section aria-labelledby="about-iching-title">
           <h2 id="about-iching-title">
             <u>About the I‑Ching</u>
@@ -155,7 +155,7 @@ export const About = () => {
             respectful of its ancient roots.
           </p>
         </section>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
-};
+}

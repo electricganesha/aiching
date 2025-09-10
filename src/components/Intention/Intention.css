@@ -1,0 +1,26 @@
+.intention {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.intention-textarea {
+    resize: none;
+    padding: 8;
+    font-size: 12;
+    border-radius: 8;
+    border: 1px solid var(--shadow);
+    color: var(--shadow);
+    text-align: center;
+    vertical-align: middle;
+    width: auto;
+    margin-bottom: 12px;
+
+    &:focus {
+        outline: none;
+        color: var(--highlight);
+        border: 1px solid var(--highlight);
+    }
+}

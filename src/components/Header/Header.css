@@ -1,0 +1,27 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--background);
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    gap: 18px;
+
+    img {
+        height: 56px;
+        vertical-align: middle;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        text-align: center;
+        word-break: break-word;
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0;
+    }
+}

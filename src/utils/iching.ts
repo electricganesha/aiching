@@ -1,4 +1,4 @@
-import { HEXAGRAMS, TRIGRAMS } from "../data/data";
+import { HEXAGRAMS, TRIGRAMS } from "@/data/data";
 import hexagramText from "../data/iching_wilhelm_translation";
 
 export const tossCoins = (): number[] => {

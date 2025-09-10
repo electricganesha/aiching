@@ -2,7 +2,7 @@ import { Plane } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { FC, useEffect, useRef, useState } from "react";
 import { Group, Texture, TextureLoader } from "three";
-import { Coin } from "./Coin";
+import { Coin } from "../Coin/Coin";
 
 interface CoinTossCanvasProps {
   coinTosses: number[][];

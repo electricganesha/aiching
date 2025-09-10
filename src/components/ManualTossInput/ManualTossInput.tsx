@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
-import { BACKGROUND_COLOR, HOVER_COLOR } from "../pages/Home";
+
+import "./ManualTossInput.css";
 
 interface ManualTossInputProps {
   manualMode: boolean;
@@ -65,16 +66,16 @@ export const ManualTossInput: FC<ManualTossInputProps> = ({
   if (!manualMode) return null;
 
   return (
-    <div style={{ textAlign: "center", marginBottom: 24 }}>
+    <div className="manualTossInput">
       <h3>Manual Coin Toss Input</h3>
       <p>Line {manualLine + 1} of 6</p>
-      <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+      <div className="coinSelectors">
         {[0, 1, 2].map((i) => (
           <select
             key={i}
             value={manualTosses[manualLine][i] ?? ""}
             onChange={(e) => handleManualCoin(i, Number(e.target.value))}
-            style={{ fontSize: 18, padding: 4, borderRadius: 6 }}
+            className="coinSelect"
           >
             <option value="">Coin {i + 1}</option>
             <option value={3}>Heads (3)</option>
@@ -83,15 +84,6 @@ export const ManualTossInput: FC<ManualTossInputProps> = ({
         ))}
       </div>
       <button
-        style={{
-          marginTop: 16,
-          padding: "4px 16px",
-          borderRadius: 8,
-          background: BACKGROUND_COLOR,
-          color: HOVER_COLOR,
-          border: `1px solid ${HOVER_COLOR}`,
-          cursor: "pointer",
-        }}
         disabled={
           manualTosses[manualLine].length !== 3 ||
           manualTosses[manualLine].some((v) => v !== 2 && v !== 3)
@@ -100,20 +92,7 @@ export const ManualTossInput: FC<ManualTossInputProps> = ({
       >
         {manualLine < 5 ? "Next Line" : "Finish"}
       </button>
-      <button
-        style={{
-          marginLeft: 12,
-          padding: "4px 16px",
-          borderRadius: 8,
-          background: BACKGROUND_COLOR,
-          color: HOVER_COLOR,
-          border: `1px solid ${HOVER_COLOR}`,
-          cursor: "pointer",
-        }}
-        onClick={handleManualReset}
-      >
-        Exit Manual Input
-      </button>
+      <button onClick={handleManualReset}>Exit Manual Input</button>
     </div>
   );
 };

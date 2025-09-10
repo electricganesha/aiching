@@ -1,33 +1,24 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import { HexagramData, Trigram } from "@/types/hexagram";
+import { WilhelmHexagram } from "@/types/wilhelm";
 import {
   findHexagram,
   generateHexagram,
   getTranslationKeysForHexagramNumber,
   getTrigrams,
-} from "../utils/iching";
-import { WilhelmHexagram } from "../types/wilhelm";
-
+} from "@/utils/iching";
+import { Intention } from "@/components/Intention/Intention";
+import { ManualTossInput } from "@/components/ManualTossInput/ManualTossInput";
+import { TossResults } from "@/components/TossResults/TossResults";
 import { Canvas } from "@react-three/fiber";
-import { ManualTossInput } from "../components/ManualTossInput";
-import { HexagramText } from "../components/HexagramText";
-import { TossResults } from "../components/TossResults";
-import { CoinTossCanvas } from "../components/CoinTossCanvas";
-import { Intention } from "../components/Intention";
-
-interface Trigram {
-  name: string;
-}
-interface HexagramData {
-  name: string;
-  number: number;
-}
+import { CoinTossCanvas } from "@/components/CoinTossCanvas/CoinTossCanvas";
+import { HexagramText } from "@/components/HexagramText/HexagramText";
 
 const NUMBER_OF_TOSSES = 6;
-export const BACKGROUND_COLOR = "#fffaf0";
-export const BORDER_COLOR = "#f2eada";
-export const HOVER_COLOR = "#7d4a5b";
 
-const Home = () => {
+export default function Home() {
   const [hexagram, setHexagram] = useState<string>("");
   const [coinTosses, setCoinTosses] = useState<number[][]>([]);
   const [isShowingCanvas, setIsShowingCanvas] = useState(false);
@@ -99,7 +90,7 @@ const Home = () => {
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "flex-start",
+          justifyContent: "space-between",
           alignItems: "center",
           gap: 16,
           flexWrap: "wrap",
@@ -128,20 +119,20 @@ const Home = () => {
                   intention === ""
                     ? "darkgrey"
                     : isHoveredToss
-                    ? HOVER_COLOR
-                    : BORDER_COLOR,
+                    ? "var(--highlight)"
+                    : "var(--secondary)",
                 borderRadius: "8px",
                 border:
                   intention === ""
                     ? `1px solid darkgrey`
-                    : `1px solid ${HOVER_COLOR}`,
+                    : `1px solid var(--primary)`,
                 cursor: intention === "" ? "not-allowed" : "pointer",
                 color:
                   intention === ""
                     ? "lightgray"
                     : isHoveredToss
-                    ? BACKGROUND_COLOR
-                    : HOVER_COLOR,
+                    ? "var(--background)"
+                    : "var(--primary)",
               }}
               onClick={() => {
                 if (!tossed) {
@@ -172,20 +163,20 @@ const Home = () => {
                   intention === ""
                     ? "darkgrey"
                     : isHoveredManual
-                    ? HOVER_COLOR
-                    : BORDER_COLOR,
+                    ? "var(--highlight)"
+                    : "var(--secondary)",
                 borderRadius: "8px",
                 border:
                   intention === ""
                     ? `1px solid darkgrey`
-                    : `1px solid ${HOVER_COLOR}`,
+                    : `1px solid var(--primary)`,
                 cursor: intention === "" ? "not-allowed" : "pointer",
                 color:
                   intention === ""
                     ? "lightgray"
                     : isHoveredManual
-                    ? BACKGROUND_COLOR
-                    : HOVER_COLOR,
+                    ? "var(--background)"
+                    : "var(--primary)",
               }}
               onClick={() => {
                 setManualMode(true);
@@ -219,7 +210,7 @@ const Home = () => {
       {isShowingCanvas ? (
         <hr
           style={{
-            border: `1px solid ${BORDER_COLOR}`,
+            border: `1px solid var(--shadow)`,
             marginTop: 20,
             marginBottom: 0,
           }}
@@ -276,18 +267,18 @@ const Home = () => {
         </div>
       </div>
       {isShowingCanvas ? (
-        <hr style={{ border: `1px solid ${BORDER_COLOR}`, margin: "0" }}></hr>
+        <hr style={{ border: `1px solid var(--shadow)`, margin: "0" }}></hr>
       ) : null}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "space-evenly",
           alignItems: "stretch",
           gap: 24,
         }}
       >
-        <div style={{ width: "100%", paddingTop: 24, minWidth: 0 }}>
+        <div style={{ width: "100%", paddingTop: 8, minWidth: 0 }}>
           {displayedTosses.length > 0 && (
             <TossResults coinTosses={displayedTosses} />
           )}
@@ -297,10 +288,10 @@ const Home = () => {
             width: "100%",
             borderLeft:
               (isShowingCanvas || coinTosses.length > 0) && tossesComplete
-                ? `1px solid ${BORDER_COLOR}`
+                ? `1px solid var(--shadow)`
                 : "none",
             paddingLeft: 0,
-            paddingTop: 24,
+            paddingTop: 8,
             minWidth: 0,
           }}
         >
@@ -314,34 +305,6 @@ const Home = () => {
           )}
         </div>
       </div>
-      <style>{`
-        @media (max-width: 600px) {
-          .responsive-flex {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 8px !important;
-          }
-          .responsive-btns {
-            width: 100% !important;
-            justify-content: center !important;
-            gap: 8px !important;
-          }
-          .responsive-btns button {
-            width: 100%;
-            margin-bottom: 8px;
-          }
-          .responsive-canvas {
-            max-width: 100vw !important;
-            height: 160px !important;
-          }
-          .responsive-card {
-            margin: 8px !important;
-            padding: 8px !important;
-          }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default Home;
+}

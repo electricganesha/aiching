@@ -1,7 +1,7 @@
-import { BORDER_COLOR, HOVER_COLOR } from "../pages/Home";
-import { WilhelmHexagram } from "../types/wilhelm";
-import { Card } from "./Card";
-import { CollapsibleCard } from "./CollapsibleCard";
+import { WilhelmHexagram } from "@/types/wilhelm";
+import { Card } from "../Card/Card";
+
+import "./HexagramText.css";
 
 // Function to render the hexagram using SVG
 const renderHexagram = (hexagram: string, step: number) => {
@@ -22,7 +22,7 @@ const renderHexagram = (hexagram: string, step: number) => {
             y1={index * (lineHeight + gap)}
             x2={lineWidth}
             y2={index * (lineHeight + gap)}
-            stroke={line === "1" ? HOVER_COLOR : "transparent"}
+            stroke={line === "1" ? "var(--highlight)" : "transparent"}
             strokeWidth={strokeWidth}
             style={{ opacity: step > index ? 1 : 0 }}
           />
@@ -38,7 +38,7 @@ const renderHexagram = (hexagram: string, step: number) => {
               y1={index * (lineHeight + gap)}
               x2={lineWidth / 2 - 5}
               y2={index * (lineHeight + gap)}
-              stroke={HOVER_COLOR}
+              stroke="var(--highlight)"
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
             />
@@ -55,7 +55,7 @@ const renderHexagram = (hexagram: string, step: number) => {
               y1={index * (lineHeight + gap)}
               x2={lineWidth}
               y2={index * (lineHeight + gap)}
-              stroke={HOVER_COLOR}
+              stroke="var(--highlight)"
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
             />
@@ -81,35 +81,24 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
   return (
     <div style={{ width: "100%" }}>
       <Card>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 36,
-          }}
-        >
+        <div className="hexagramText">
           {renderHexagram(hexagram, 6)}
           <h3>{hexagramData?.name}</h3>
         </div>
       </Card>
-      <hr
-        style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
-      ></hr>
+      <hr className="divider"></hr>
       {hexagramText && (
         <>
-          <CollapsibleCard>
+          <Card>
             <p>
               <b>Lower Trigram:</b> {trigrams?.lower?.name}
             </p>
             <p>
               <b>Upper Trigram:</b> {trigrams?.upper?.name}
             </p>
-          </CollapsibleCard>
-          <hr
-            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
-          ></hr>
-          <CollapsibleCard>
+          </Card>
+          <hr className="divider"></hr>
+          <Card>
             <u>
               <h3> Symbolism</h3>
             </u>
@@ -117,11 +106,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
               <b>Hexagram Number:</b> {hexagramData?.number}
             </p>
             <p>{hexagramText?.wilhelm_symbolic}</p>
-          </CollapsibleCard>
-          <hr
-            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
-          ></hr>
-          <CollapsibleCard>
+          </Card>
+          <hr className="divider"></hr>
+          <Card>
             <u>
               <h3>Judgment</h3>
             </u>
@@ -131,11 +118,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             <p>
               <b>Comments:</b> {hexagramText?.wilhelm_judgment.comments}
             </p>
-          </CollapsibleCard>
-          <hr
-            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
-          ></hr>
-          <CollapsibleCard>
+          </Card>
+          <hr className="divider"></hr>
+          <Card>
             <u>
               <h3>Image</h3>
             </u>
@@ -145,11 +130,9 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
             <p>
               <b>Comments:</b> {hexagramText?.wilhelm_image.comments}
             </p>
-          </CollapsibleCard>
-          <hr
-            style={{ border: `1px solid ${BORDER_COLOR}`, margin: "20px 0" }}
-          ></hr>
-          <CollapsibleCard>
+          </Card>
+          <hr className="divider"></hr>
+          <Card>
             <u>
               <h3>Lines</h3>
             </u>
@@ -159,7 +142,11 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
                   <div
                     key={_index}
                     style={{
-                      borderBottom: `1px solid ${BORDER_COLOR}`,
+                      borderBottom:
+                        Number(_index) !==
+                        Object.entries(hexagramText.wilhelm_lines).length
+                          ? `1px solid var(--shadow)`
+                          : "none",
                       marginBottom: 10,
                     }}
                   >
@@ -173,7 +160,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
                   </div>
                 )
               )}
-          </CollapsibleCard>
+          </Card>
         </>
       )}
     </div>

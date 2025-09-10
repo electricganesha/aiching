@@ -1,0 +1,11 @@
+.hexagramText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
+}
+
+.divider {
+    border: 1px solid var(--shadow);
+    margin: 20px 0;
+}
