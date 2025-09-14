@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar/Navbar";
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
+import { auth } from "@/lib/auth";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,16 +16,20 @@ export const metadata: Metadata = {
     "A modern way to connect with the ancient wisdom of the I-Ching.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body className={`${inter.variable}`}>
-        <Navbar />
-        {children}
+        <AuthProvider session={session}>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
