@@ -58,5 +58,5 @@ export default function SignInPopupButton() {
     });
   }, [update]);
 
-  return <Button onClick={() => openPopup()}>Sign in with Google</Button>;
+  return <Button onClick={() => openPopup()}>Sign in</Button>;
 }

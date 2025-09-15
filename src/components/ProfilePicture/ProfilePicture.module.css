@@ -1,0 +1,6 @@
+.profilePicture {
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 4px 8px var(--box-shadow);
+}

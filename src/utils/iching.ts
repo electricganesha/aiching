@@ -41,3 +41,7 @@ export const getTranslationKeysForHexagramNumber = (number: number) => {
 
   return text;
 };
+
+export const getHexagramByNumber = (number: number) => {
+  return HEXAGRAMS.find((h) => h.number === number) || null;
+};

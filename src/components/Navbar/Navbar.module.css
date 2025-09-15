@@ -13,6 +13,17 @@
     }
 }
 
+.navbar__links {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+    top: 10px;
+    right: 10px;
+}
+
 .navbar__link {
     margin: 0;
     padding: 0 10px;
@@ -23,4 +34,21 @@
 .navbar__link:hover {
     color: var(--highlight);
     text-decoration: underline;
+}
+
+.navbar__button {
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--shadow);
+    border: 1px solid var(--shadow);
+    padding: 6px 12px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+}
+
+.navbar__button:hover {
+    background-color: var(--highlight);
+    color: var(--background);
+    border-color: var(--highlight);
 }

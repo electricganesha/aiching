@@ -1,0 +1,38 @@
+.collapsibleContainer {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.collapsibleContent {
+    overflow: scroll;
+    max-height: 0;
+    padding: 0;
+    transition: max-height 0.3s ease;
+}
+
+.collapsibleContent__expanded {
+    max-height: 500px;
+    padding: 0;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.title {
+    margin-right: 10px;
+    display: inline;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+}

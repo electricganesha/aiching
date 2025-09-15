@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { HexagramData, Trigram } from "@/types/hexagram";
 import { WilhelmHexagram } from "@/types/wilhelm";
 import {
@@ -22,6 +23,7 @@ import { Button } from "@/components/Button/Button";
 const NUMBER_OF_TOSSES = 6;
 
 export default function Home() {
+  const { data: session } = useSession();
   const [hexagram, setHexagram] = useState<string>("");
   const [coinTosses, setCoinTosses] = useState<number[][]>([]);
   const [isShowingCanvas, setIsShowingCanvas] = useState(false);
@@ -37,6 +39,7 @@ export default function Home() {
   const [animate, setAnimate] = useState(false);
   const [displayedTosses, setDisplayedTosses] = useState<number[][]>([]);
   const [tossesComplete, setTossesComplete] = useState(false);
+  const [historySaved, setHistorySaved] = useState(false);
 
   // Generate hexagram and reset animation (now for R3F)
   const handleGenerate = useCallback(() => {
@@ -49,6 +52,7 @@ export default function Home() {
     setIsShowingCanvas(true);
     setAnimate(true);
     setTossesComplete(false);
+    setHistorySaved(false);
 
     // Simulate tosses for demo: you can animate this with state for each toss
     const tosses: number[][] = [];
@@ -72,11 +76,13 @@ export default function Home() {
     setIsShowingCanvas(false);
     setAnimate(false);
     setTossesComplete(false);
+    setHistorySaved(false);
   }, []);
 
   // Only calculate hexagram after tossesComplete
   useEffect(() => {
-    if (tossesComplete) {
+    if (tossesComplete && !historySaved) {
+      // Only generate hexagram and save history once per toss
       const { hexagram: newHexagram } = generateHexagram();
       setHexagram(newHexagram);
       const trigramsResult = getTrigrams(newHexagram);
@@ -90,8 +96,24 @@ export default function Home() {
       }
       const hexagramResult = findHexagram(newHexagram);
       setHexagramData(hexagramResult || null);
+      // Save toss history if user is signed in
+      if (session?.user) {
+        const flatTosses = coinTosses.flat();
+        if (flatTosses.length === 21) {
+          fetch("/api/history", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              intention,
+              tosses: flatTosses,
+              hexagram: hexagramResult?.number,
+            }),
+          });
+        }
+      }
+      setHistorySaved(true);
     }
-  }, [tossesComplete, displayedTosses]);
+  }, [tossesComplete, historySaved, session, coinTosses, intention]);
 
   const hexagramText: WilhelmHexagram | null = hexagramData
     ? getTranslationKeysForHexagramNumber(hexagramData.number)
