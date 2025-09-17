@@ -6,7 +6,7 @@
 .coinSelectors {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    gap: 8px;
 }
 
 .coinSelect {
@@ -14,14 +14,14 @@
     background-color: var(--secondary);
     border: 1px solid var(--shadow);
     align-items: center;
-    text-align: center;
+    text-align: left;
     margin: 0;
     width: 100%;
     font-family: inherit;
     cursor: pointer;
     line-height: inherit;
-    font-size: 18px;
-    padding: 4px;
+    font-size: 14px;
+    padding: 4px 14px;
     border-radius: 8px;
     height: 36px;
     background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');

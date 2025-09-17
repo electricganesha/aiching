@@ -6,18 +6,25 @@
     color: var(--primary);
     padding: 8px 16px;
     border-radius: 8px;
-    margin-bottom: 16px;
     gap: 18px;
 
     img {
-        height: 56px;
+        width: 24px;
+        height: 24px;
         vertical-align: middle;
     }
 
     h1 {
-        font-size: 2.2rem;
+        font-size: 24px;
         text-align: center;
         word-break: break-word;
+    }
+
+    h3 {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--shadow);
+        margin: 0;
     }
 
     @media screen and (max-width: 600px) {

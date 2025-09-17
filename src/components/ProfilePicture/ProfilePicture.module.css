@@ -3,4 +3,5 @@
     object-fit: cover;
     display: block;
     box-shadow: 0 4px 8px var(--box-shadow);
+    margin-bottom: 8px;
 }

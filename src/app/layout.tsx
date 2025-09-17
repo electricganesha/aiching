@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar/Navbar";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import { auth } from "@/lib/auth";
+import { Footer } from "@/components/Footer/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,8 +29,9 @@ export default async function RootLayout({
       <body className={`${inter.variable}`}>
         <AuthProvider session={session}>
           <Navbar />
-          {children}
+          <div className="content">{children}</div>
         </AuthProvider>
+        <Footer />
       </body>
     </html>
   );

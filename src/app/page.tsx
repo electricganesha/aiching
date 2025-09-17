@@ -20,7 +20,11 @@ import { HexagramText } from "@/components/HexagramText/HexagramText";
 import styles from "./page.module.css";
 import Image from "next/image";
 import { Button } from "@/components/Button/Button";
+import { Hero } from "@/components/Hero/Hero";
+import { Card } from "@/components/Card/Card";
+import { TossMode } from "@/generated/prisma";
 const NUMBER_OF_TOSSES = 6;
+const DEFAULT_COIN_STATE = Array(NUMBER_OF_TOSSES).fill([2, 2, 2]);
 
 export default function Home() {
   const { data: session } = useSession();
@@ -81,6 +85,14 @@ export default function Home() {
 
   // Only calculate hexagram after tossesComplete
   useEffect(() => {
+    console.log("useEffect > tossesComplete > ", {
+      tossesComplete,
+      historySaved,
+      session,
+      coinTosses,
+      intention,
+      manualMode,
+    });
     if (tossesComplete && !historySaved) {
       // Only generate hexagram and save history once per toss
       const { hexagram: newHexagram } = generateHexagram();
@@ -96,10 +108,11 @@ export default function Home() {
       }
       const hexagramResult = findHexagram(newHexagram);
       setHexagramData(hexagramResult || null);
+
       // Save toss history if user is signed in
       if (session?.user) {
         const flatTosses = coinTosses.flat();
-        if (flatTosses.length === 21) {
+        if (flatTosses.length === 21 || flatTosses.length === 18) {
           fetch("/api/history", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -107,78 +120,221 @@ export default function Home() {
               intention,
               tosses: flatTosses,
               hexagram: hexagramResult?.number,
+              mode: manualMode ? TossMode.MANUAL : TossMode.AUTOMATIC,
             }),
           });
+          setHistorySaved(true);
         }
       }
-      setHistorySaved(true);
     }
-  }, [tossesComplete, historySaved, session, coinTosses, intention]);
+  }, [
+    tossesComplete,
+    historySaved,
+    session,
+    coinTosses,
+    intention,
+    manualMode,
+  ]);
 
   const hexagramText: WilhelmHexagram | null = hexagramData
     ? getTranslationKeysForHexagramNumber(hexagramData.number)
     : null;
 
   return (
-    <div style={{ maxWidth: 960, margin: "0 auto", padding: 8 }}>
-      <div className={styles.mainLayout}>
-        <Intention
-          showIntention={!tossed && !manualMode}
-          intention={intention}
-          setIntention={setIntention}
-        />
-        <div className={styles.responsiveBtns}>
-          {!manualMode && (
-            <Button
-              disabled={intention === "" || animate}
-              onClick={() => {
-                if (!tossed) {
-                  handleGenerate();
-                } else {
-                  handleReset();
-                }
-              }}
-            >
-              <b>{isShowingCanvas && tossed ? "Toss again" : "Toss coins"}</b>
-              <Image
-                src="/icons/fengshuicoins.png"
-                alt="Toss coins"
-                width={20}
-                height={20}
+    <div>
+      <Hero />
+      <div className={styles.mainLayout} id="main-layout">
+        <Card style={{ width: "960px" }}>
+          <h3>
+            <span>✨</span> Set your intention
+          </h3>
+          <p>Focus your mind and ask the oracle your question</p>
+          <Intention
+            showIntention={!tossed && !manualMode}
+            intention={intention}
+            setIntention={setIntention}
+          />
+        </Card>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "row",
+            gap: 24,
+            width: "1080px",
+          }}
+        >
+          <Card style={{ width: "960px" }}>
+            <h3>
+              <span>🌌</span> Coin oracle
+            </h3>
+            <p>Choose your method of divination</p>
+            <div className={styles.responsiveBtns}>
+              <div>
+                {!manualMode && (
+                  <Button
+                    disabled={intention === "" || animate}
+                    onClick={() => {
+                      if (!tossed) {
+                        handleGenerate();
+                      } else {
+                        handleReset();
+                      }
+                    }}
+                  >
+                    <b>
+                      {isShowingCanvas && tossed ? "Toss again" : "Toss coins"}
+                    </b>
+                    <Image
+                      src="/icons/fengshuicoins.png"
+                      alt="Toss coins"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                )}
+                {/* Show Re-input tosses button in manual mode */}
+                {manualMode && (
+                  <Button
+                    disabled={intention === ""}
+                    onClick={() => {
+                      setManualMode(false);
+                    }}
+                  >
+                    <b>Reset tosses</b>
+                    <Image
+                      src="/icons/fengshuiinput.png"
+                      alt="Reset tosses"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                )}
+              </div>
+              {/* Only show 'or' divider when not in manual mode and not tossed */}
+              {!manualMode && !tossed && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "164px",
+                      border: `1px solid lightgrey`,
+                    }}
+                  />
+                  <span
+                    style={{
+                      color: "var(--shadow)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    or
+                  </span>
+                  <div
+                    style={{
+                      width: "164px",
+                      border: `1px solid lightgrey`,
+                    }}
+                  />
+                </div>
+              )}
+              <div>
+                {!isShowingCanvas && !tossed && !manualMode && (
+                  <Button
+                    disabled={intention === ""}
+                    onClick={() => {
+                      setManualMode(true);
+                    }}
+                  >
+                    <b>
+                      {isShowingCanvas && tossed
+                        ? "Re-input tosses"
+                        : "Input tosses"}
+                    </b>
+                    <Image
+                      src="/icons/fengshuiinput.png"
+                      alt="Input tosses"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Card>
+          <Card style={{ width: "960px" }}>
+            {!manualMode ? (
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: 460,
+                  height: 200,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  margin: "0 auto",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: 200,
+                    pointerEvents: "none",
+                    zIndex: 10,
+                    margin: "20px auto",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 460,
+                      height: 400,
+                      position: "relative",
+                      zIndex: 10,
+                    }}
+                  >
+                    <Canvas shadows camera={{ position: [0, 3, 3], fov: 75 }}>
+                      <CoinTossCanvas
+                        coinTosses={
+                          coinTosses.length > 0
+                            ? coinTosses
+                            : DEFAULT_COIN_STATE
+                        }
+                        animate={animate}
+                        onAnimationEnd={() => {
+                          setAnimate(false);
+                          setTossesComplete(true);
+                        }}
+                        onTossUpdate={setDisplayedTosses}
+                        headsUrl="/icons/fengshuicoinheads-icon.png"
+                        tailsUrl="/icons/fengshuicointails-icon.png"
+                      />
+                    </Canvas>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <ManualTossInput
+                manualMode={manualMode}
+                setCoinTosses={setCoinTosses}
+                setTossed={setTossed}
+                setDisplayedTosses={setDisplayedTosses}
+                setIsShowingCanvas={setIsShowingCanvas}
+                setManualMode={setManualMode}
+                setTossesComplete={setTossesComplete}
+                handleReset={handleReset}
               />
-            </Button>
-          )}
-          {!isShowingCanvas && !tossed && !manualMode && (
-            <Button
-              disabled={intention === ""}
-              onClick={() => {
-                setManualMode(true);
-              }}
-            >
-              <b>
-                {isShowingCanvas && tossed ? "Re-input tosses" : "Input tosses"}
-              </b>
-              <Image
-                src="/icons/fengshuiinput.png"
-                alt="Input tosses"
-                width={20}
-                height={20}
-              />
-            </Button>
-          )}
+            )}
+          </Card>
         </div>
       </div>
-
-      <ManualTossInput
-        manualMode={manualMode}
-        setCoinTosses={setCoinTosses}
-        setTossed={setTossed}
-        setDisplayedTosses={setDisplayedTosses}
-        setIsShowingCanvas={setIsShowingCanvas}
-        setManualMode={setManualMode}
-        setTossesComplete={setTossesComplete}
-        handleReset={handleReset}
-      />
 
       {isShowingCanvas && !manualMode ? (
         <hr
@@ -189,58 +345,7 @@ export default function Home() {
           }}
         ></hr>
       ) : null}
-      {!manualMode ? (
-        <div
-          style={{
-            width: "100%",
-            maxWidth: 400,
-            height: 200,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "0 auto",
-          }}
-        >
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              height: 200,
-              pointerEvents: "none",
-              zIndex: 10,
-              margin: "20px auto",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {(isShowingCanvas || (coinTosses.length > 0 && !manualMode)) && (
-              <div
-                style={{
-                  width: 800,
-                  height: 400,
-                  position: "relative",
-                  zIndex: 10,
-                }}
-              >
-                <Canvas shadows camera={{ position: [0, 3, 3], fov: 75 }}>
-                  <CoinTossCanvas
-                    coinTosses={coinTosses}
-                    animate={animate}
-                    onAnimationEnd={() => {
-                      setAnimate(false);
-                      setTossesComplete(true);
-                    }}
-                    onTossUpdate={setDisplayedTosses}
-                    headsUrl="/icons/fengshuicoinheads-icon.png"
-                    tailsUrl="/icons/fengshuicointails-icon.png"
-                  />
-                </Canvas>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : null}
+
       {isShowingCanvas && !manualMode ? (
         <hr style={{ border: `1px solid var(--shadow)`, margin: "0" }}></hr>
       ) : null}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { TossMode } from "@/generated/prisma";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -9,12 +10,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { intention, tosses, hexagram } = await req.json();
+  const { intention, tosses, hexagram, mode } = await req.json();
   if (
     typeof intention !== "string" ||
     !Array.isArray(tosses) ||
-    tosses.length !== 21 ||
-    typeof hexagram !== "number"
+    (tosses.length !== 21 && tosses.length !== 18) ||
+    typeof hexagram !== "number" ||
+    (mode !== TossMode.AUTOMATIC && mode !== TossMode.MANUAL)
   ) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
@@ -32,6 +34,7 @@ export async function POST(req: NextRequest) {
       intention,
       tosses,
       hexagram,
+      mode,
     },
   });
 

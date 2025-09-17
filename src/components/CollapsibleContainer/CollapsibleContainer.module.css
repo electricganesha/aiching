@@ -7,25 +7,16 @@
 }
 
 .collapsibleContent {
-    overflow: scroll;
+    overflow: auto;
     max-height: 0;
     padding: 0;
     transition: max-height 0.3s ease;
 }
 
 .collapsibleContent__expanded {
-    max-height: 500px;
-    padding: 0;
-}
-
-.toggleButton {
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
+    width: fit-content;
+    max-height: fit-content;
+    padding: 0 24px;
 }
 
 .title {
@@ -35,4 +26,42 @@
     justify-content: flex-start;
     align-items: center;
     gap: 24px;
+}
+
+.closeButton {
+    margin-top: 16px;
+    background-color: transparent;
+    color: var(--highlight);
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.closeButton:hover {
+    background-color: var(--highlight);
+    color: var(--white);
+}
+
+.closeButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.closeButtonContainerTop {
+    display: flex;
+    justify-content: flex-end;
+
+    svg {
+        color: var(--primary);
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        margin-right: 24px;
+    }
+
+    svg:hover {
+        color: var(--highlight);
+    }
 }

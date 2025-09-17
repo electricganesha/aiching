@@ -66,6 +66,11 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
+enum TossMode {
+  AUTOMATIC
+  MANUAL
+}
+
 model TossHistory {
   id        String   @id @default(uuid())
   userId    String
@@ -73,5 +78,6 @@ model TossHistory {
   tosses    Int[] // 18 values: 6 lines × 3 coins (e.g., [1,0,1,0,1,1,...])
   hexagram  Int
   createdAt DateTime @default(now())
+  mode      TossMode @default(AUTOMATIC)
   user      User     @relation(fields: [userId], references: [id])
 }

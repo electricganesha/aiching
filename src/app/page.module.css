@@ -1,10 +1,22 @@
 .mainLayout {
+  background-color: var(--background);
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 16;
   flex-wrap: wrap;
+  padding: 48px;
+
+  h3 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  p {
+    margin: 16px 0 24px 0;
+  }
 
   @media screen and (max-width: 600px) {
     flex-direction: column;
@@ -12,6 +24,8 @@
 }
 
 .resultsLayout {
+  margin: auto;
+  max-width: 1080px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -43,10 +57,19 @@
 
 .responsiveBtns {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   gap: 16px;
-  flex-wrap: wrap;
+  width: 100%;
+
+  > div {
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
 
   @media screen and (max-width: 600px) {
     width: 100% !important;
