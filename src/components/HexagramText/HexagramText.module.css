@@ -9,3 +9,10 @@
     border: 1px solid var(--shadow);
     margin: 20px 0;
 }
+
+.interpretation {
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+}

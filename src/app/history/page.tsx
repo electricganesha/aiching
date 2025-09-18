@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 
 import styles from "./page.module.css";
 import { TossMode } from "@/generated/prisma";
+import Markdown from "react-markdown";
 
 interface HistoryItem {
   id: string;
@@ -23,6 +24,7 @@ interface HistoryItem {
   intention: string;
   hexagram: number;
   mode: TossMode;
+  interpretation: string;
 }
 
 const HistoryPage: React.FC = () => {
@@ -306,6 +308,29 @@ const HistoryPage: React.FC = () => {
                                 {hexagramData.number} - {hexagramData?.name}
                               </p>
                             </div>
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 0,
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                margin: 0,
+                              }}
+                            >
+                              <h3>Interpretation</h3>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  color: "var(--shadow)",
+                                  fontSize: 14,
+                                  fontWeight: "lighter",
+                                }}
+                              >
+                                <Markdown>{item.interpretation}</Markdown>
+                              </p>
+                            </div>
                           </div>
                         }
                       >
@@ -327,6 +352,11 @@ const HistoryPage: React.FC = () => {
                                 )
                               : null
                           }
+                          interpretation={{
+                            loading: false,
+                            error: null,
+                            result: item.interpretation,
+                          }}
                         />
                       </CollapsibleContainer>
                     </Card>

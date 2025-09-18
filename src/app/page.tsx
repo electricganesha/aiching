@@ -23,11 +23,14 @@ import { Button } from "@/components/Button/Button";
 import { Hero } from "@/components/Hero/Hero";
 import { Card } from "@/components/Card/Card";
 import { TossMode } from "@/generated/prisma";
+import { useAi } from "@/hooks/useAi";
 const NUMBER_OF_TOSSES = 6;
 const DEFAULT_COIN_STATE = Array(NUMBER_OF_TOSSES).fill([2, 2, 2]);
 
 export default function Home() {
   const { data: session } = useSession();
+  const { loading, error, result, getAiResponse } = useAi();
+
   const [hexagram, setHexagram] = useState<string>("");
   const [coinTosses, setCoinTosses] = useState<number[][]>([]);
   const [isShowingCanvas, setIsShowingCanvas] = useState(false);
@@ -43,6 +46,7 @@ export default function Home() {
   const [animate, setAnimate] = useState(false);
   const [displayedTosses, setDisplayedTosses] = useState<number[][]>([]);
   const [tossesComplete, setTossesComplete] = useState(false);
+  const [intentionTriggered, setIntentionTriggered] = useState(false);
   const [historySaved, setHistorySaved] = useState(false);
 
   // Generate hexagram and reset animation (now for R3F)
@@ -85,15 +89,7 @@ export default function Home() {
 
   // Only calculate hexagram after tossesComplete
   useEffect(() => {
-    console.log("useEffect > tossesComplete > ", {
-      tossesComplete,
-      historySaved,
-      session,
-      coinTosses,
-      intention,
-      manualMode,
-    });
-    if (tossesComplete && !historySaved) {
+    if (tossesComplete && !intentionTriggered) {
       // Only generate hexagram and save history once per toss
       const { hexagram: newHexagram } = generateHexagram();
       setHexagram(newHexagram);
@@ -109,6 +105,23 @@ export default function Home() {
       const hexagramResult = findHexagram(newHexagram);
       setHexagramData(hexagramResult || null);
 
+      if (hexagramResult && intention) {
+        getAiResponse(hexagramResult.number, intention);
+        setIntentionTriggered(true);
+      }
+    }
+  }, [
+    tossesComplete,
+    intentionTriggered,
+    session,
+    coinTosses,
+    intention,
+    manualMode,
+    getAiResponse,
+  ]);
+
+  useEffect(() => {
+    if (result && !loading && !error && !historySaved) {
       // Save toss history if user is signed in
       if (session?.user) {
         const flatTosses = coinTosses.flat();
@@ -119,8 +132,9 @@ export default function Home() {
             body: JSON.stringify({
               intention,
               tosses: flatTosses,
-              hexagram: hexagramResult?.number,
+              hexagram: hexagramData?.number,
               mode: manualMode ? TossMode.MANUAL : TossMode.AUTOMATIC,
+              interpretation: result,
             }),
           });
           setHistorySaved(true);
@@ -128,12 +142,15 @@ export default function Home() {
       }
     }
   }, [
-    tossesComplete,
-    historySaved,
-    session,
+    loading,
+    error,
+    result,
     coinTosses,
     intention,
+    session,
+    hexagramData,
     manualMode,
+    historySaved,
   ]);
 
   const hexagramText: WilhelmHexagram | null = hexagramData
@@ -362,6 +379,7 @@ export default function Home() {
               trigrams={trigrams}
               hexagramData={hexagramData}
               hexagramText={hexagramText}
+              interpretation={{ loading, error, result }}
             />
           )}
         </div>

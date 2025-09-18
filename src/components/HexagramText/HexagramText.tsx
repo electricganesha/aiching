@@ -2,6 +2,8 @@ import { WilhelmHexagram } from "@/types/wilhelm";
 import { Card } from "../Card/Card";
 
 import styles from "./HexagramText.module.css";
+import { Spinner } from "../Spinner/Spinner";
+import Markdown from "react-markdown";
 
 // Function to render the hexagram using SVG
 const renderHexagram = (hexagram: string, step: number) => {
@@ -70,6 +72,11 @@ interface HexagramTextProps {
   trigrams: { lower: { name: string }; upper: { name: string } } | null;
   hexagramData: { name: string; number: number } | null;
   hexagramText: WilhelmHexagram | null;
+  interpretation: {
+    loading: boolean;
+    error: string | null;
+    result: string | null;
+  };
 }
 
 export const HexagramText: React.FC<HexagramTextProps> = ({
@@ -77,6 +84,7 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
   trigrams,
   hexagramData,
   hexagramText,
+  interpretation: { error, result },
 }) => {
   return (
     <div style={{ width: "100%" }}>
@@ -87,6 +95,16 @@ export const HexagramText: React.FC<HexagramTextProps> = ({
         </div>
       </Card>
       <hr className={styles.divider}></hr>
+      <Card>
+        <u>
+          <h3>Interpretation</h3>
+        </u>
+        <div className={styles.interpretation}>
+          {error && <div style={{ color: "red" }}>Error: {error}</div>}
+          <div>{result && <Markdown>{result}</Markdown>}</div>
+        </div>
+      </Card>
+
       {hexagramText && (
         <>
           <Card>

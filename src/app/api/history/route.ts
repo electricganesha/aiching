@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { intention, tosses, hexagram, mode } = await req.json();
+  const { intention, tosses, hexagram, mode, interpretation } =
+    await req.json();
   if (
     typeof intention !== "string" ||
     !Array.isArray(tosses) ||
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
       tosses,
       hexagram,
       mode,
+      interpretation,
     },
   });
 
