@@ -19,7 +19,8 @@
   }
 
   @media screen and (max-width: 600px) {
-    flex-direction: column;
+    max-width: 100%;
+    flex-wrap: nowrap;
   }
 }
 
@@ -33,7 +34,9 @@
   gap: 24px;
 
   @media screen and (max-width: 600px) {
+    width: 90%;
     flex-direction: column;
+    margin: auto;
   }
 }
 
@@ -75,5 +78,60 @@
     width: 100% !important;
     justify-content: center !important;
     gap: 8px !important;
+  }
+}
+
+.intention {
+  width: 1080px;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(../../public/bg.jpg);
+  background-size: cover;
+  background-position: center;
+  color: var(--background);
+  text-shadow: 0px 0px 2px var(--shadow);
+  padding: 24px 0;
+
+  @media screen and (max-width: 600px) {
+    padding: 24px;
+    width: 100%;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 24;
+  width: 1080px;
+  padding: 24px 0;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    padding: 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.tossMethod {
+  width: 540px;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(../../public/bg.jpg);
+  background-size: cover;
+  background-position: top center;
+  color: var(--background);
+  text-shadow: 0px 0px 2px var(--shadow);
+  padding: 24px;
+
+  @media screen and (max-width: 600px) {
+    padding: 24px;
+    width: 100%;
+  }
+}
+
+.canvas {
+  width: 540px;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
   }
 }

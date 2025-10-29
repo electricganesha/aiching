@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 
 import styles from "./Intention.module.css";
@@ -17,8 +19,6 @@ export const Intention: FC<IntentionProps> = ({
     <div className={styles.intention}>
       {showIntention ? (
         <textarea
-          rows={4}
-          cols={48}
           placeholder="E.g. What should I do today?"
           className={styles.intentionTextarea}
           onInput={(e) => setIntention((e.target as HTMLTextAreaElement).value)}

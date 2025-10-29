@@ -59,7 +59,7 @@ const HistoryPage: React.FC = () => {
       <div className={styles.historyContainer}>
         <div className={styles.historyHeader}>
           <Image
-            src="/logo/logo.png"
+            src="/logo/logo_white.png"
             alt="aiChing Logo"
             width={128}
             height={128}
@@ -83,7 +83,7 @@ const HistoryPage: React.FC = () => {
     <div className={styles.historyContainer}>
       <div className={styles.historyHeader}>
         <Image
-          src="/logo/logo.png"
+          src="/logo/logo_white.png"
           alt="aiChing Logo"
           width={128}
           height={128}
@@ -92,7 +92,7 @@ const HistoryPage: React.FC = () => {
       </div>
       <div className={styles.historyContent}>
         <div className={styles.historyStats}>
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <div className={styles.historyStat}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +112,7 @@ const HistoryPage: React.FC = () => {
               <p>Total readings</p>
             </div>
           </Card>
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <div className={styles.historyStat}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +136,7 @@ const HistoryPage: React.FC = () => {
               <p>This month</p>
             </div>
           </Card>
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <div className={styles.historyStat}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +179,7 @@ const HistoryPage: React.FC = () => {
 
                 return (
                   <li key={item.id} className={styles.historyItem}>
-                    <Card>
+                    <Card className={styles.cardWithBackground}>
                       <CollapsibleContainer
                         title={
                           <div
@@ -196,7 +196,7 @@ const HistoryPage: React.FC = () => {
                               style={{
                                 margin: 0,
                                 textAlign: "left",
-                                color: "var(--highlight)",
+                                color: "var(--background)",
                                 display: "flex",
                                 justifyContent: "space-between",
                                 width: "100%",
@@ -206,10 +206,10 @@ const HistoryPage: React.FC = () => {
                               <div
                                 style={{
                                   margin: 0,
-                                  border: "1px solid var(--highlight)",
+                                  border: "1px solid var(--background)",
                                   backgroundColor: "var(--background)",
                                   padding: 8,
-                                  color: "var(--highlight)",
+                                  color: "var(--shadow)",
                                   borderRadius: 8,
                                   fontSize: 14,
                                   fontWeight: "lighter",
@@ -236,7 +236,7 @@ const HistoryPage: React.FC = () => {
                                   display: "flex",
                                   alignItems: "center",
                                   gap: 4,
-                                  color: "var(--shadow)",
+                                  color: "var(--background)",
                                 }}
                               >
                                 <svg
@@ -263,7 +263,7 @@ const HistoryPage: React.FC = () => {
                                   display: "flex",
                                   alignItems: "center",
                                   gap: 4,
-                                  color: "var(--shadow)",
+                                  color: "var(--background)",
                                 }}
                               >
                                 <svg
@@ -300,7 +300,7 @@ const HistoryPage: React.FC = () => {
                               <p
                                 style={{
                                   margin: 0,
-                                  color: "var(--highlight)",
+                                  color: "var(--background)",
                                   fontSize: 18,
                                   fontWeight: "lighter",
                                 }}
@@ -323,9 +323,9 @@ const HistoryPage: React.FC = () => {
                               <p
                                 style={{
                                   margin: 0,
-                                  color: "var(--shadow)",
+                                  color: "var(--background)",
                                   fontSize: 14,
-                                  fontWeight: "lighter",
+                                  textShadow: "0px 0px 2px var(--shadow)",
                                 }}
                               >
                                 <Markdown>{item.interpretation}</Markdown>
@@ -334,30 +334,32 @@ const HistoryPage: React.FC = () => {
                           </div>
                         }
                       >
-                        <HexagramText
-                          hexagram={hexagramData?.binary}
-                          trigrams={{
-                            lower: trigrams.lower
-                              ? { name: trigrams.lower.name }
-                              : { name: "" },
-                            upper: trigrams.upper
-                              ? { name: trigrams.upper.name }
-                              : { name: "" },
-                          }}
-                          hexagramData={hexagramData}
-                          hexagramText={
-                            hexagramData
-                              ? getTranslationKeysForHexagramNumber(
-                                  hexagramData.number
-                                )
-                              : null
-                          }
-                          interpretation={{
-                            loading: false,
-                            error: null,
-                            result: item.interpretation,
-                          }}
-                        />
+                        <div className={styles.hexagramTextWrapper}>
+                          <HexagramText
+                            hexagram={hexagramData?.binary}
+                            trigrams={{
+                              lower: trigrams.lower
+                                ? { name: trigrams.lower.name }
+                                : { name: "" },
+                              upper: trigrams.upper
+                                ? { name: trigrams.upper.name }
+                                : { name: "" },
+                            }}
+                            hexagramData={hexagramData}
+                            hexagramText={
+                              hexagramData
+                                ? getTranslationKeysForHexagramNumber(
+                                    hexagramData.number
+                                  )
+                                : null
+                            }
+                            interpretation={{
+                              loading: false,
+                              error: null,
+                              result: item.interpretation,
+                            }}
+                          />
+                        </div>
                       </CollapsibleContainer>
                     </Card>
                   </li>

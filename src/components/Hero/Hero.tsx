@@ -6,7 +6,12 @@ import Image from "next/image";
 export const Hero: FC = () => {
   return (
     <section className={styles.hero}>
-      <Image src="/logo/logo.png" alt="aiChing Logo" width={128} height={128} />
+      <Image
+        src="/logo/logo_white.png"
+        alt="aiChing Logo"
+        width={128}
+        height={128}
+      />
       <h1>aiChing</h1>
       <p>
         Discover ancient wisdom through the digital casting of coins. Let the

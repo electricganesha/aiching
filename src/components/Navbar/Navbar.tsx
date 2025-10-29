@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Header } from "../Header/Header";
 import Link from "next/link";
 
@@ -13,6 +13,9 @@ import { Button } from "../Button/Button";
 export const Navbar: FC = () => {
   const session = useSession();
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = () => setIsMenuOpen(false);
 
   if (pathname.includes("/auth")) return null;
 
@@ -20,8 +23,39 @@ export const Navbar: FC = () => {
     <nav className={styles.navbar}>
       <div className={styles.navbar__content}>
         <Header />
-        <div className={styles.navbar__links}>
-          <Link href="/" className={styles.navbar__link}>
+        <button
+          className={styles.navbar__hamburger}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            {isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            )}
+          </svg>
+        </button>
+        <div
+          className={`${styles.navbar__links} ${
+            isMenuOpen ? styles.navbar__links_open : ""
+          }`}
+        >
+          <Link href="/" className={styles.navbar__link} onClick={closeMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -39,7 +73,11 @@ export const Navbar: FC = () => {
             <span> Home</span>
           </Link>
 
-          <Link href="/about" className={styles.navbar__link}>
+          <Link
+            href="/about"
+            className={styles.navbar__link}
+            onClick={closeMenu}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -58,7 +96,11 @@ export const Navbar: FC = () => {
           </Link>
           {session.data?.user ? (
             <>
-              <Link href="/history" className={styles.navbar__link}>
+              <Link
+                href="/history"
+                className={styles.navbar__link}
+                onClick={closeMenu}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,7 +117,11 @@ export const Navbar: FC = () => {
                 </svg>
                 <span>History</span>
               </Link>
-              <Link href="/profile" className={styles.navbar__link}>
+              <Link
+                href="/profile"
+                className={styles.navbar__link}
+                onClick={closeMenu}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -92,7 +138,12 @@ export const Navbar: FC = () => {
                 </svg>
                 <span>Profile</span>
               </Link>
-              <Button onClick={() => signOut()}>
+              <Button
+                onClick={() => {
+                  closeMenu();
+                  signOut();
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

@@ -5,11 +5,11 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <div style={{ maxWidth: "100%" }}>
+    <div className={styles.aboutWrapper}>
       <div className={styles.aboutContainer}>
         <div className={styles.aboutHeader}>
           <Image
-            src="/logo/logo.png"
+            src="/logo/logo_white.png"
             alt="aiChing Logo"
             width={128}
             height={128}
@@ -17,7 +17,7 @@ export default function About() {
           <h1>About aiChing</h1>
         </div>
         <div className={styles.aboutContent}>
-          <Card className={styles.introCard}>
+          <Card className={styles.cardWithBackground}>
             <section className={styles.aboutSection}>
               <div className={styles.aboutTitle}>
                 <h2>☯️</h2>
@@ -36,7 +36,7 @@ export default function About() {
             </section>
           </Card>
 
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <section aria-labelledby="how-app-works-title">
               <div className={styles.aboutTitle}>
                 <h2>⚙️</h2>
@@ -78,7 +78,7 @@ export default function About() {
             </section>
           </Card>
 
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <section aria-labelledby="ai-interpretation-title">
               <div className={styles.aboutTitle}>
                 <h2>🤖</h2>
@@ -110,7 +110,7 @@ export default function About() {
             </section>
           </Card>
 
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <section aria-labelledby="hexagram-calculation-title">
               <div className={styles.aboutTitle}>
                 <Image src="/logo/logo.png" alt="" width={24} height={24} />
@@ -144,7 +144,7 @@ export default function About() {
             </section>
           </Card>
 
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <section aria-labelledby="randomness-title">
               <div className={styles.aboutTitle}>
                 <h2>🎲</h2>
@@ -171,7 +171,7 @@ export default function About() {
             </section>
           </Card>
 
-          <Card>
+          <Card className={styles.cardWithBackground}>
             <section aria-labelledby="why-use-title">
               <div className={styles.aboutTitle}>
                 <h2>📜</h2>

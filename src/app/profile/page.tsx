@@ -17,12 +17,12 @@ const ProfilePage = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profileHeader}>
         <Image
-          src="/logo/logo.png"
+          src="/logo/logo_white.png"
           alt="aiChing Logo"
           width={128}
           height={128}
         />
-        <h1>Profile page</h1>
+        <h1>Profile</h1>
       </div>
       <div className={styles.profileContent}>
         <ProfilePicture src={image} alt="Profile Picture" size={100} />

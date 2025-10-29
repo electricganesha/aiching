@@ -31,7 +31,7 @@
 .closeButton {
     margin-top: 16px;
     background-color: transparent;
-    color: var(--highlight);
+    color: var(--background);
     border: none;
     padding: 10px 20px;
     font-size: 14px;
@@ -40,8 +40,8 @@
 }
 
 .closeButton:hover {
-    background-color: var(--highlight);
-    color: var(--white);
+    background-color: var(--shadow);
+    color: var(--shadow);
 }
 
 .closeButtonContainer {
@@ -54,7 +54,7 @@
     justify-content: flex-end;
 
     svg {
-        color: var(--primary);
+        color: var(--background);
         cursor: pointer;
         width: 20px;
         height: 20px;

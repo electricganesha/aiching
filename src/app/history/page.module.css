@@ -1,10 +1,13 @@
 .historyContainer {
     line-height: 1.5;
-    padding: 8px;
+    padding: 0;
     padding-top: 56px;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(../../../public/bg.jpg);
+    background-size: cover;
+    background-position: top center;
 
     h2 {
-        color: var(--shadow);
+        color: var(--background);
         text-align: left;
     }
 
@@ -19,6 +22,11 @@
     h1 {
         margin: 0;
         font-size: 6rem;
+        color: var(--background);
+
+        @media screen and (max-width: 600px) {
+            font-size: 3rem;
+        }
     }
 
     margin: 56px 0;
@@ -38,6 +46,7 @@
 
     @media screen and (max-width: 600px) {
         flex-direction: column;
+        padding: 24px;
     }
 }
 
@@ -79,7 +88,7 @@
     svg {
         width: 36px;
         height: 36px;
-        color: var(--highlight);
+        color: var(--background);
     }
 
     h2,
@@ -89,10 +98,11 @@
     }
 
     p {
-        color: var(--shadow);
+        color: var(--background);
+        text-shadow: 0px 0px 2px var(--background);
     }
 
-    color: var(--shadow);
+    color: var(--background);
 }
 
 .historyList {
@@ -105,4 +115,39 @@
     align-items: flex-start;
     width: 100%;
     padding-bottom: 48px;
+}
+
+.cardWithBackground {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(../../../public/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background);
+    padding: 24px 56px;
+    margin: 24px 0;
+    border-radius: 8px;
+    border: 1px solid var(--shadow);
+    box-shadow: 0 4px 8px var(--box-shadow);
+    color: var(--background);
+    text-shadow: 0px 0px 2px var(--shadow);
+
+    h2 {
+        color: var(--background);
+        text-shadow: 0px 0px 2px var(--shadow);
+    }
+
+    @media screen and (max-width: 600px) {
+        margin: 24px 0;
+        padding: 12px 24px;
+    }
+}
+
+.hexagramTextWrapper {
+    > div > div {
+        border: 1px solid var(--background);
+        background-color: transparent;
+    }
 }

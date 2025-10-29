@@ -14,6 +14,7 @@
     border-bottom: 1px solid var(--shadow);
 
     @media screen and (max-width: 600px) {
+        padding: 14px 0;
         flex-direction: column;
         align-items: center;
     }
@@ -33,9 +34,27 @@
     align-items: center;
 
     @media screen and (max-width: 600px) {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         gap: 12px;
+    }
+}
+
+.navbar__hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--shadow);
+
+    @media screen and (max-width: 600px) {
+        display: block;
+    }
+
+    svg {
+        width: 28px;
+        height: 28px;
     }
 }
 
@@ -45,6 +64,35 @@
     justify-content: flex-end;
     align-items: center;
     gap: 24px;
+
+    @media screen and (max-width: 600px) {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--background);
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 0 20px;
+        border-bottom: 1px solid var(--shadow);
+        box-shadow: 0 4px 8px var(--box-shadow);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+            max-height 0.3s ease-in-out,
+            opacity 0.3s ease-in-out,
+            padding 0.3s ease-in-out;
+    }
+}
+
+.navbar__links_open {
+    @media screen and (max-width: 600px) {
+        max-height: 500px;
+        opacity: 1;
+        padding: 20px;
+    }
 }
 
 .navbar__link {

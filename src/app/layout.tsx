@@ -5,6 +5,8 @@ import { Navbar } from "@/components/Navbar/Navbar";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import { auth } from "@/lib/auth";
 import { Footer } from "@/components/Footer/Footer";
+import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,6 +34,8 @@ export default async function RootLayout({
           <div className="content">{children}</div>
         </AuthProvider>
         <Footer />
+        <Analytics />
+        <GoogleAnalytics gaId="G-KZVN0K26Z6" />
       </body>
     </html>
   );

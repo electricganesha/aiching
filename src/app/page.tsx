@@ -161,8 +161,13 @@ export default function Home() {
     <div>
       <Hero />
       <div className={styles.mainLayout} id="main-layout">
-        <Card style={{ width: "960px" }}>
-          <h3>
+        <Card className={styles.intention}>
+          <h3
+            style={{
+              color: "var(--background)",
+              textShadow: "0px 0px 2px var(--shadow)",
+            }}
+          >
             <span>✨</span> Set your intention
           </h3>
           <p>Focus your mind and ask the oracle your question</p>
@@ -172,17 +177,14 @@ export default function Home() {
             setIntention={setIntention}
           />
         </Card>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "row",
-            gap: 24,
-            width: "1080px",
-          }}
-        >
-          <Card style={{ width: "960px" }}>
-            <h3>
+        <div className={styles.actions}>
+          <Card className={styles.tossMethod}>
+            <h3
+              style={{
+                color: "var(--background)",
+                textShadow: "0px 0px 2px var(--shadow)",
+              }}
+            >
               <span>🌌</span> Coin oracle
             </h3>
             <p>Choose your method of divination</p>
@@ -283,7 +285,7 @@ export default function Home() {
               </div>
             </div>
           </Card>
-          <Card style={{ width: "960px" }}>
+          <Card className={styles.canvas}>
             {!manualMode ? (
               <div
                 style={{
