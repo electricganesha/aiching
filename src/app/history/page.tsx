@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { TossMode } from "@/generated/prisma";
 import Markdown from "react-markdown";
+import Link from "next/link";
 
 interface HistoryItem {
   id: string;
@@ -153,9 +154,7 @@ const HistoryPage: React.FC = () => {
                 />
               </svg>
               <h2>
-                {data?.history?.filter((item) =>
-                  isThisMonth(new Date(item.createdAt))
-                ).length || 0}
+                {new Set(data?.history?.map((item) => item.hexagram)).size}
               </h2>
               <p>Unique hexagrams</p>
             </div>
@@ -214,6 +213,10 @@ const HistoryPage: React.FC = () => {
                                   fontSize: 14,
                                   fontWeight: "lighter",
                                   textTransform: "capitalize",
+                                  minWidth: 112,
+                                  height: 22,
+                                  textAlign: "center",
+                                  marginLeft: 8,
                                 }}
                               >
                                 {item.mode.toLowerCase()} toss
@@ -305,7 +308,14 @@ const HistoryPage: React.FC = () => {
                                   fontWeight: "lighter",
                                 }}
                               >
-                                {hexagramData.number} - {hexagramData?.name}
+                                <Link
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ color: "var(--background)" }}
+                                  href={`http://www2.unipr.it/~deyoung/I_Ching_Wilhelm_Translation.html#${hexagramData.number}`}
+                                >
+                                  {hexagramData.number} - {hexagramData?.name}
+                                </Link>
                               </p>
                             </div>
                             <div

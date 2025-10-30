@@ -11,9 +11,10 @@ const renderHexagram = (hexagram: string, step: number) => {
   const lineWidth = 100;
   const gap = 5;
   const strokeWidth = 5;
+  const padding = strokeWidth / 2; // Add padding to prevent clipping
 
   return (
-    <svg width={lineWidth} height={lineHeight * 6 + gap * 5}>
+    <svg width={lineWidth} height={lineHeight * 6 + gap * 5 + strokeWidth}>
       {hexagram
         .split("")
         .reverse() // Reverse to draw bottom line first
@@ -21,9 +22,9 @@ const renderHexagram = (hexagram: string, step: number) => {
           <line
             key={line + index}
             x1={0}
-            y1={index * (lineHeight + gap)}
+            y1={index * (lineHeight + gap) + padding}
             x2={lineWidth}
-            y2={index * (lineHeight + gap)}
+            y2={index * (lineHeight + gap) + padding}
             stroke={line === "1" ? "var(--highlight)" : "transparent"}
             strokeWidth={strokeWidth}
             style={{ opacity: step > index ? 1 : 0 }}
@@ -37,9 +38,9 @@ const renderHexagram = (hexagram: string, step: number) => {
             <line
               key={line + index}
               x1={0}
-              y1={index * (lineHeight + gap)}
+              y1={index * (lineHeight + gap) + padding}
               x2={lineWidth / 2 - 5}
-              y2={index * (lineHeight + gap)}
+              y2={index * (lineHeight + gap) + padding}
               stroke="var(--highlight)"
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
@@ -54,9 +55,9 @@ const renderHexagram = (hexagram: string, step: number) => {
             <line
               key={line + index}
               x1={lineWidth / 2 + 5}
-              y1={index * (lineHeight + gap)}
+              y1={index * (lineHeight + gap) + padding}
               x2={lineWidth}
-              y2={index * (lineHeight + gap)}
+              y2={index * (lineHeight + gap) + padding}
               stroke="var(--highlight)"
               strokeWidth={strokeWidth}
               style={{ opacity: step > index ? 1 : 0 }}
